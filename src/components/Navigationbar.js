@@ -7,19 +7,16 @@ import {useContext, useEffect, useState} from "react";
 import{HouseDoor, Bell, Gear, SearchHeart, CircleFill} from "react-bootstrap-icons";
 
 import AuthContext from "../context/AuthContext";
-import Login from "../Pages/Login";
-import Registration from "../Pages/Regsitration";
+import Login from "../pages/Login";
+import Registration from "../pages/Regsitration";
 
 
 const Navigationbar = () => {
     const { user} = useContext(AuthContext);
     return (
-        <div>
-        {user ? (
-            <>
-                <Navbar collapseOnSelect expand="sm" bg="dark" variant="dark">
-                        <Navbar.Toggle aria-controls="navbarScroll" data-bs-toggle="collapse" data-bs-target="#navbarScroll" />
-                        <Navbar.Collapse id="navbarScroll">
+            <Navbar collapseOnSelect expand="sm" bg="dark" variant="dark">
+                <Navbar.Toggle aria-controls="navbarScroll" data-bs-toggle="collapse" data-bs-target="#navbarScroll" />
+                    <Navbar.Collapse id="navbarScroll">
                             <Form className="d-flex">
                                 <Form.Control
                                 type="search"
@@ -53,15 +50,6 @@ const Navigationbar = () => {
                             </Nav>
                         </Navbar.Collapse>
                 </Navbar>
-            </>
-        ):(
-            <>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
-            </>
-
-        )}
-        </div>
     );
 }
  

@@ -7,6 +7,8 @@ import Login from './pages/Login'
 import { AuthProvider } from "./context/AuthContext";
 import Profile from './pages/Profile'
 import Register from "./pages/Regsitration";
+import Default from "./pages/Default";
+
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
                     <Route path='/Profile' element={<Profile/>}/>
                     <Route path = "/Login" element={<Login/>}/>
                      <Route path = "/Register" element={<Register/>}/>
+                     <Route path = "/Default" element={<Default/>}/>
                 </Routes>
             </AuthProvider>
         </BrowserRouter>

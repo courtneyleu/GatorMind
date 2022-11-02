@@ -1,16 +1,27 @@
 const Post = () =>{
-return(
-    <div>
-        <h1>
-            Title
-        </h1>
-        <h3>
-            Author
-        </h3>
-        <p>
-            Content
-        </p>
-    </div>
-);
+    const { id } = useParams();
+    const { data: blog, error, isPending } =  useFetch('http://localhost:8000/post/' + id);
+    const history = useHistory();
+
+    const handleClick = () => {
+        fetch('http://localhost:8000/post/'+ blog.id, {
+            method: 'DELETE'
+        }).then(() => {
+            history.push('/');
+        })
+    }
+
+    return ( 
+        <div className="blog-details">
+            {isPending && <div>Loading...</div>}
+            {error && <div>{error}</div>}
+            <article >
+                <h2>{blog.title}</h2>
+                <p>Written by {blog.author}</p>
+                <div>{blog.body}</div>
+                <button onClick={handleClick}>Delete</button>
+            </article>
+        </div>
+     );
 }
 export default Post;

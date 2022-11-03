@@ -1,23 +1,26 @@
 import React, { useState } from "react";
+import { TextCenter } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 export default function Default() {
   return (
-    <div>
-      <h1>Default Page</h1>
-      <h1>GATOR MIND</h1>
-      <h1>A safe space to share.</h1>
+    <center>
+      <div>
+        <h1>GATOR MIND</h1>
+        <h1>A safe space to share.</h1>
+      </div>
 
-      <button>
-        <ul>
-          <li>
-            <Link to="/Login">Log In</Link>
-          </li>
-          <li>
-            <Link to="/Register">Create Account</Link>
-          </li>
-        </ul>
-      </button>
-    </div>
+      <Button>
+        <Link to="/Login"></Link>
+        Login
+      </Button>
+      <div></div>
+
+      <Button>
+        <Link to="/Register"></Link>
+        Create Account
+      </Button>
+    </center>
   );
 }

@@ -1,3 +1,4 @@
+import {useParams, useHistory} from 'react-router-dom';
 const Post = () =>{
     const { id } = useParams();
     const { data: blog, error, isPending } =  useFetch('http://localhost:8000/post/' + id);

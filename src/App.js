@@ -8,8 +8,8 @@ import { AuthProvider } from "./context/AuthContext";
 import Profile from './pages/Profile'
 import Register from "./pages/Regsitration";
 import Default from "./pages/Default";
-
-
+import Post from "./components/Post"
+import Create from "./components/Create"
 
 function App() {
   return (
@@ -25,6 +25,8 @@ function App() {
                     <Route path = "/Login" element={<Login/>}/>
                      <Route path = "/Register" element={<Register/>}/>
                      <Route path = "/Default" element={<Default/>}/>
+                     <Route path = "/posts/:id" element = {<Post/>}/>
+                     <Route path = "/create" element = {<Create/>}/>
                 </Routes>
             </AuthProvider>
         </BrowserRouter>

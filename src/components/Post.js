@@ -1,8 +1,9 @@
-import {useParams, useHistory} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
+import useAxios from '../utils/useAxios';
 const Post = () =>{
     const { id } = useParams();
-    const { data: blog, error, isPending } =  useFetch('http://localhost:8000/post/' + id);
-    const history = useHistory();
+    const { data: blog, error, isPending } =  useAxios('http://localhost:8000/post/' + id);
+    const history = useNavigate();
 
     const handleClick = () => {
         fetch('http://localhost:8000/post/'+ blog.id, {

@@ -3,12 +3,48 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import dayjs from "dayjs";
 import { useContext } from "react";
+import { useState, useEffect } from 'react';
 import AuthContext from "../context/AuthContext";
 
 const baseURL = "http://127.0.0.1:8000/api";
 
-const useAxios = () => {
+const useAxios = (url) => {
   const { authTokens, setUser, setAuthTokens } = useContext(AuthContext);
+  const [data, setData] = useState([]);
+    const [isPending, setIsPending] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      const abortCont = new AbortController();
+
+      setTimeout(() => {
+          fetch(url, { signal: abortCont.signal })
+          .then(res => {
+              if(!res.ok)
+              {
+                  throw Error('Could not fetch data for that resource');
+              }
+              return res.json();
+          })
+          .then((data) => {
+              setData(data);
+              setIsPending(false);
+              setError(null);
+          })
+          .catch((err) => {
+              if(err.name==='AbortError') {
+                  console.log('Fetch aborted');
+              }
+              else {
+                  setError(err.message);
+                  setIsPending(false);
+              }
+          })
+      }, 5);
+      return () => abortCont.abort();
+    },[url]);
+
+
 
   const axiosInstance = axios.create({
     baseURL,
@@ -34,7 +70,7 @@ const useAxios = () => {
     return req;
   });
 
-  return axiosInstance;
+  return axiosInstance, data, isPending, error;
 };
 
 export default useAxios;

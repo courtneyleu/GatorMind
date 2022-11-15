@@ -22,6 +22,13 @@ const Create = () => {
             setIsPending(false);
             history.push('/');
         })
+        /*Axios.post("http://localhost:8000/posts",{
+            data: {
+                title: title,
+                body: body,
+                author: author
+            }
+        })*/
     }
 
     return ( 

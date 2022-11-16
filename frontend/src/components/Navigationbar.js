@@ -89,7 +89,7 @@ return(
             </button>
             <div className='collapse navbar-collapse' id='navbarNav'>
                 <ul className='navbar-nav ml-auto'>
-                    {isAuthenticated ? authLinks() : guestLinks()}
+                    {isAuthenticated ? guestLinks() : authLinks()}
                 </ul>
             </div>
         </nav>

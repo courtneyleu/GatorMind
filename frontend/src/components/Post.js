@@ -10,7 +10,7 @@ const Post = (props) => {
 
         const fetchData = async () => {
             try {
-                const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/blog/${slug}`);
+                const res = await axios.get(`${'http://localhost:8000'}/api/blog/${slug}`);
                 setBlog(res.data);
             }
             catch (err) {

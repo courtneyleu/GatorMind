@@ -2,38 +2,32 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const PostList = () => {
+const Category = (props) => {
     const [blogs, setBlogs] = useState([]);
-    const [featuredBlog, setFeaturedBlog] = useState([]);
+    const [currentCategory, setCurrentCategory] = useState('');
 
     useEffect(() => {
+        const category = props.match.params.id;
+        setCurrentCategory(capitalizeFirstLetter(category));
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
         const fetchData = async () => {
             try {
-                const res = await axios.get(`${'http://localhost:8000'}/api/blog/featured`);
-                setFeaturedBlog(res.data[0]);
-                console.log(res.data)
-            }
-            catch (err) {
-
-            }
-        }
-
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const res = await axios.get(`${'http://localhost:8000'}/api/blog/`);
+                const res = await axios.post(`${'http://localhost:8000'}/api/blog/category`, { category }, config);
                 setBlogs(res.data);
             }
             catch (err) {
 
             }
-        }
+        };
 
-        fetchBlogs();
-    }, []);
+        fetchData();
+    }, [props.match.params.id]);
 
     const capitalizeFirstLetter = (word) => {
         if (word)
@@ -41,10 +35,10 @@ const PostList = () => {
         return '';
     };
 
-    const getBlogs = () => {
+    const getCategoryBlogs = () => {
         let list = [];
         let result = [];
-        
+
         blogs.map(blogPost => {
             return list.push(
                 <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -80,6 +74,7 @@ const PostList = () => {
 
     return (
         <div className='container mt-3'>
+            <h3 className='display-4'>{currentCategory} Category</h3>
             <div className="nav-scroller py-1 mb-2">
                 <nav className="nav d-flex justify-content-between">
                     <Link className="p-2 text-muted" to='/category/world'>World</Link>
@@ -96,22 +91,9 @@ const PostList = () => {
                     <Link className="p-2 text-muted" to='/category/travel'>Travel</Link>
                 </nav>
             </div>
-
-            <div className="jumbotron p-4 p-md-5 text-white rounded bg-dark">
-                <div className="col-md-6 px-0">
-                    <h1 className="display-4 font-italic">{featuredBlog.title}</h1>
-                    <p className="lead my-3">{featuredBlog.excerpt}</p>
-                    <p className="lead mb-0">
-                        <Link to={`/blog/${featuredBlog.slug}`} className="text-white font-weight-bold">
-                            Continue reading...
-                        </Link>
-                    </p>
-                </div>
-            </div>
-
-            {getBlogs()}
+            {getCategoryBlogs()}
         </div>
     );
 };
 
-export default PostList;
+export default Category;

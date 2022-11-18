@@ -50,35 +50,80 @@ def post_detail(request, pk):
         return HttpResponse(status=204)
 
 
-class AccountView(APIView):
-    serializer_class = AccountSerializer
+@csrf_exempt
+def account_list(request):
+    if request.method == 'GET':
+        snippets = Account.objects.all()
+        serializer = AccountSerializer(snippets, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
-    def get(self, request):
-        body = [
-            {"first_name": body.first_name, "last_name": body.last_name, "email": body.email, "username": body.username,
-             "password": body.password}
-            for body in Account.objects.all()]
-        return Response(body)
-
-    def post(self, request):
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = AccountSerializer(data=data)
+        if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
 
 
-class CommentView(APIView):
-    serializer_class = CommentSerializer
+@csrf_exempt
+def account_detail(request, pk):
+    try:
+        snippet = Account.objects.get(pk=pk)
+    except Account.DoesNotExist:
+        return HttpResponse(status=404)
 
-    def get(self, request):
-        body = [{"author": body.author, "body": body.body, "created_on": body.created_on, "post": body.post}
-                for body in Comment.objects.all()]
-        return Response(body)
+    if request.method == 'GET':
+        serializer = AccountSerializer(snippet)
+        return JsonResponse(serializer.data)
 
-    def post(self, request):
-        serializer = CommentSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = AccountSerializer(snippet, data=data)
+        if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
 
-# Create your views here.
+    elif request.method == 'DELETE':
+        snippet.delete()
+        return HttpResponse(status=204)
+
+@csrf_exempt
+def comment_list(request):
+    if request.method == 'GET':
+        snippets = Comment.objects.all()
+        serializer = CommentSerializer(snippets, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = CommentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+
+@csrf_exempt
+def comment_detail(request, pk):
+    try:
+        snippet = Comment.objects.get(pk=pk)
+    except Comment.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = CommentSerializer(snippet)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = CommentSerializer(snippet, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        snippet.delete()
+        return HttpResponse(status=204)

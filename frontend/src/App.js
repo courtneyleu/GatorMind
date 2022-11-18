@@ -7,10 +7,18 @@ import Home from "./pages/Home";
 import Default from "./pages/Default"
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings"
+<<<<<<< HEAD
+import {Bell, CircleFill, Gear, HouseDoor} from "react-bootstrap-icons";
+import Post from "./components/Post";
+import PostList from "./components/PostList";
+import Category from "./components/Category";
+import EventBus from "./common/EventBus";
+=======
 import {BackspaceReverse, Bell, CircleFill, Gear, HouseDoor} from "react-bootstrap-icons";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, logout} from "./services/firebase"
 
+>>>>>>> 6eec7d37a0aaff067b8dd789d03072c19f059412
 
 function App(){
   const [user, loading, error] = useAuthState(auth);
@@ -86,6 +94,9 @@ function App(){
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path = "/post/:id" element = {<Post/>}/>
+            <Route path = "/post" element = {<PostList/>}/>
+            <Route path = "/category/:id" element = {<Category/>}/>
           </Routes>
         </div>
       </div>

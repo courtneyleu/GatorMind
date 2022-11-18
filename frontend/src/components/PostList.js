@@ -20,8 +20,8 @@ const PostList = () => {
                     created_on: `11/13/2001`,
                     last_modified: `11/12/2002`
                 }
-                setFeaturedBlog(res.data[0]);
-                console.log(res.data)
+                setFeaturedBlog(res[0]);
+                console.log(res)
             }
             catch (err) {
 

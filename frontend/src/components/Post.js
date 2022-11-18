@@ -10,19 +10,19 @@ const Post = (props) => {
 
         const fetchData = async () => {
             try {
-                const res = await axios.get(`${'http://localhost:8000'}/api/blog/${slug}`);
+                const res = await axios.get(`${'http://localhost:8000'}/api/post/${slug}`);
                 setBlog(res.data);
             }
             catch (err) {
 
             }
         };
-
+//title, body , created-on, last-modified (may want to add category section as well)
         fetchData();
     }, [props.match.params.id]);
 
     const createBlog = () => {
-        return {__html: blog.content}
+        return {__html: blog.body}
     };
 
     const capitalizeFirstLetter = (word) => {
@@ -35,10 +35,10 @@ const Post = (props) => {
         <div className='container mt-3'>
             <h1 className='display-2'>{blog.title}</h1>
             <h2 className='text-muted mt-3'>Category: {capitalizeFirstLetter(blog.category)}</h2>
-            <h4>{blog.month} {blog.day}</h4>
+            <h4>{blog.created_on}</h4>
             <div className='mt-5 mb-5' dangerouslySetInnerHTML={createBlog()} />
             <hr />
-            <p className='lead mb-5'><Link to='/blog' className='font-weight-bold'>Back to Blogs</Link></p>
+            <p className='lead mb-5'><Link to='/post' className='font-weight-bold'>Back to Posts</Link></p>
         </div>
     );
 };

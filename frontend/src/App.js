@@ -11,7 +11,9 @@ import Default from "./pages/Default"
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings"
 import {Bell, CircleFill, Gear, HouseDoor} from "react-bootstrap-icons";
-
+import Post from "./components/Post";
+import PostList from "./components/PostList";
+import Category from "./components/Category";
 import EventBus from "./common/EventBus";
 
 class App extends Component {
@@ -128,6 +130,9 @@ class App extends Component {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path = "/post/:id" element = {<Post/>}/>
+            <Route path = "/post" element = {<PostList/>}/>
+            <Route path = "/category/:id" element = {<Category/>}/>
           </Routes>
         </div>
       </div>

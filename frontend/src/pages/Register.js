@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/*import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, registerWithEmailAndPassword } from "../services/firebase";
@@ -147,4 +147,4 @@ function Register() {
     );
 }
 
-export default Register;
+export default Register;*/

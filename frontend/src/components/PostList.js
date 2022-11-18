@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+//<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -21,7 +21,6 @@ const PostList = () => {
                     last_modified: `11/12/2002`
                 }
                 setFeaturedBlog(res.data[0]);
-                console.log(res.data)
             }
             catch (err) {
 
@@ -132,5 +131,5 @@ const PostList = () => {
 };
 
 export default PostList;
-=======
->>>>>>> 6eec7d37a0aaff067b8dd789d03072c19f059412
+//=======
+//>>>>>>> 6eec7d37a0aaff067b8dd789d03072c19f059412

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/*import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {auth, logInWithEmailAndPassword, registerWithEmailAndPassword} from "../services/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -104,4 +104,4 @@ function Login() {
         </MDBContainer>
     );
 }
-export default Login;
+export default Login;*/

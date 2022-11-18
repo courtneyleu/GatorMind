@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -131,3 +132,5 @@ const PostList = () => {
 };
 
 export default PostList;
+=======
+>>>>>>> 6eec7d37a0aaff067b8dd789d03072c19f059412

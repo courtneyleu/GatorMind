@@ -1,111 +1,75 @@
 import React, { Component } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-import AuthService from "./services/auth-service";
-
-import Login from "./pages/LoginPage";
-import Register from "./pages/Registration";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Default from "./pages/Default"
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings"
+<<<<<<< HEAD
 import {Bell, CircleFill, Gear, HouseDoor} from "react-bootstrap-icons";
 import Post from "./components/Post";
 import PostList from "./components/PostList";
 import Category from "./components/Category";
 import EventBus from "./common/EventBus";
+=======
+import {BackspaceReverse, Bell, CircleFill, Gear, HouseDoor} from "react-bootstrap-icons";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth, logout} from "./services/firebase"
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.logOut = this.logOut.bind(this);
+>>>>>>> 6eec7d37a0aaff067b8dd789d03072c19f059412
 
-    this.state = {
-      showModeratorBoard: false,
-      showAdminBoard: false,
-      currentUser: undefined,
-    };
-  }
+function App(){
+  const [user, loading, error] = useAuthState(auth);
+  console.log(useAuthState(auth));
 
-  componentDidMount() {
-    const user = AuthService.getCurrentUser();
-
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-    }
-
-    EventBus.on("logout", () => {
-        this.logOut();
-      });
-    }
-
-  logOut() {
-    AuthService.logout();
-    this.setState({
-      currentUser: undefined,
-    });
-  }
-
-  render() {
-    const { currentUser} = this.state;
-
-    return (
+  return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
             GatorMind
           </Link>
-
-          <div className="navbar-nav mr-auto">
-            {currentUser && (
-              <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
+          {user &&
+          <div className="navbar-nav ml-auto">
+            <li className='nav-item'>
+              <button type="button" className="btn btn-dark">
+                <Link className='nav-link' to='/home'>
+                  <HouseDoor/>
                 </Link>
-              </li>
-            )}
+              </button>
+            </li>
+            <li className='nav-item'>
+              <button type="button" className="btn btn-dark">
+                <Link className='nav-link' to='/settings'>
+                  <Gear/>
+                </Link>
+              </button>
+            </li>
+            <li className='nav-item'>
+              <button type="button" className="btn btn-dark">
+                <Link className='nav-link' to='/notifications'>
+                  <Bell/>
+                </Link>
+              </button>
+            </li>
+            <li className='nav-item'>
+              <button type="button" className="btn btn-dark">
+                <Link className='nav-link' to='/profile'>
+                  <CircleFill/>
+                </Link>
+              </button>
+            </li>
+            <li className="nav-item">
+              <button type="button" className="btn btn-dark" onClick={logout}>
+                  <Link className = 'nav-link' to='/login'>
+                      <BackspaceReverse />
+                  </Link>
+              </button>
+            </li>
           </div>
-
-          {currentUser ? (
-            <div className="navbar-nav ml-auto">
-              <li className='nav-item'>
-                <button type="button" className="btn btn-dark">
-                  <Link className='nav-link' to='/home'>
-                    <HouseDoor/>
-                  </Link>
-                </button>
-              </li>
-              <li className='nav-item'>
-                <button type="button" className="btn btn-dark">
-                  <Link className='nav-link' to='/settings'>
-                    <Gear/>
-                  </Link>
-                </button>
-              </li>
-              <li className='nav-item'>
-                <button type="button" className="btn btn-dark">
-                  <Link className='nav-link' to='/notifications'>
-                    <Bell/>
-                  </Link>
-                </button>
-              </li>
-              <li className='nav-item'>
-                <button type="button" className="btn btn-dark">
-                  <Link className='nav-link' to='/profile'>
-                    <CircleFill/>
-                  </Link>
-                </button>
-              </li>
-               <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
-                  LogOut
-                </a>
-              </li>
-            </div>
-          ) : (
+          }
+          {!user &&
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
                 <Link to={"/login"} className="nav-link">
@@ -119,7 +83,7 @@ class App extends Component {
                 </Link>
               </li>
             </div>
-          )}
+          }
         </nav>
 
         <div className="container mt-3">
@@ -137,7 +101,7 @@ class App extends Component {
         </div>
       </div>
     );
-  }
 }
 
 export default App;
+

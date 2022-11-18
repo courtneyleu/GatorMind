@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -44,3 +45,5 @@ const Post = (props) => {
 };
 
 export default Post;
+=======
+>>>>>>> 6eec7d37a0aaff067b8dd789d03072c19f059412

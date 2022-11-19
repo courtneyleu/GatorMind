@@ -1,6 +1,36 @@
 import {CircleFill, Gear} from "react-bootstrap-icons";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {useEffect, useState} from "react";
+import { auth, db, logout } from "../services/firebase";
+import { query, collection, getDocs, where } from "firebase/firestore";
+import {useNavigate} from "react-router-dom";
+import {fetchUserName, getFollowers} from '../components/Account'
 
-const Settings = () => {
+
+
+function Settings() {
+    const [user, loading, error] = useAuthState(auth);
+    const [name, setName] = useState("");
+    const [followers, setFollowers] = useState(0);
+    const navigate = useNavigate();
+
+    let promiseName = fetchUserName(user);
+    promiseName.then(
+        function(value) {setName(value);},
+        function(error) {setName("error");}
+    );
+
+    let promiseFollowing = getFollowers(user);
+    promiseFollowing.then(
+        function(value) {setFollowers(value);},
+        function(error) {setName("error");}
+    );
+
+    useEffect(() => {
+        if (loading) return;
+        if (!user) return navigate("/");
+    }, [user, loading]);
+
     return (
         <div className="d-grid gap-md-3">
             <div className="p-3">
@@ -17,7 +47,7 @@ const Settings = () => {
                                     </center>
                                 </div>
                                 <div className="col">
-                                    <h2>"NAME"</h2>
+                                    <div>{"" + name}</div>
                                 </div>
                             </div>
                             <center>
@@ -27,7 +57,7 @@ const Settings = () => {
                                     <div className="row align-items-center">
                                         <div className="col">
                                             <button className="btn btn-primary">
-                                                Followers:
+                                                <div>{"Followers: " + followers}</div>
                                             </button>
                                         </div>
                                         <div className="col">
@@ -37,7 +67,7 @@ const Settings = () => {
                                         </div>
                                     </div>
                                     <button className="btn btn-secondary">
-                                        <Gear />
+                                        <Gear/>
                                         Settings
                                     </button>
                                     <p className="lead">Total Posts: </p>

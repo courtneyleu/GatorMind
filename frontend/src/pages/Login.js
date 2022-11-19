@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {auth, logInWithEmailAndPassword, registerWithEmailAndPassword} from "../services/firebase";
+import {auth, logInWithEmailAndPassword} from "../services/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
   MDBCard,
@@ -12,7 +12,6 @@ import {
   MDBValidation,
   MDBValidationItem
 } from "mdb-react-ui-kit";
-import {Spinner} from "react-bootstrap";
 
 function Login() {
 
@@ -75,7 +74,7 @@ function Login() {
                                     <MDBInput
                                         wrapperClass='mb-4 w-100'
                                         label='Password'
-                                        id='validationCustom01'
+                                        id='validationCustom02'
                                         required
                                         type='password'
                                         value={password}

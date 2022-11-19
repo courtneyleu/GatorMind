@@ -15,19 +15,18 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "secret",
-  authDomain: "secret",
-  projectId: "secret",
-  storageBucket: "secret",
-  messagingSenderId: "secret",
-  appId: "secret",
-  measurementId: "secret"
+    apiKey: "secret",
+    authDomain: "secret",
+    projectId: "secret",
+    storageBucket: "secret",
+    messagingSenderId: "secret",
+    appId: "secret",
+    measurementId: "secret"
 }
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const analytics = getAnalytics(app);
 
 
 const logInWithEmailAndPassword = async (email, password) => {
@@ -50,8 +49,11 @@ const registerWithEmailAndPassword = async (firstName, lastName, username, email
       username,
       authProvider: "local",
       email,
+      following : 0,
+      followers : 0
     });
-  } catch (err) {
+  }
+  catch (err) {
     console.error(err);
     alert(err.message);
   }
@@ -61,7 +63,8 @@ const sendPasswordReset = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);
     alert("Password reset link sent!");
-  } catch (err) {
+  }
+  catch (err) {
     console.error(err);
     alert(err.message);
   }

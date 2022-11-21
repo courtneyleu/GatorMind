@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -14,14 +13,13 @@ const PostList = () => {
             try {
               //  const res = await axios.get(`http://localhost:8000/api/blog/featured`);
                 //make res equal to something else.
-                const res = {
+                const res = [{
                     title: `hello`,
                     body : `hi`,
                     created_on: `11/13/2001`,
                     last_modified: `11/12/2002`
-                }
+                }]
                 setFeaturedBlog(res[0]);
-                console.log(res)
             }
             catch (err) {
 
@@ -45,7 +43,8 @@ const PostList = () => {
                 }
             ]
                 setBlogs(res);
-                console.log(res[0]);
+                console.log(blogs);
+                console.log(res);
             }
             catch (err) {
 
@@ -132,5 +131,3 @@ const PostList = () => {
 };
 
 export default PostList;
-=======
->>>>>>> 6eec7d37a0aaff067b8dd789d03072c19f059412

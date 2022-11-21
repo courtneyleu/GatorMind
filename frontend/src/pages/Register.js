@@ -44,14 +44,14 @@ function Register() {
             }
         }
         else {
-            registerWithEmailAndPassword(firstName, lastName, username, email, password);
+            registerWithEmailAndPassword(firstName, lastName, username, email, password).then(r => navigate("/home"));
         }
 
     };
 
     useEffect(() => {
         if (loading) return;
-        if (user) navigate.replace("/home");
+        if (user) navigate("/home");
     }, [user, loading]);
 
     return (

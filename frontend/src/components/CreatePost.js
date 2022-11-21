@@ -50,7 +50,8 @@ function CreatePost() {
                     title: title,
                     body: body,
                     category: category,
-                    created_on: created_on
+                    created_on: created_on,
+                    likes: 0
                 }
                 await setDoc(newPost, data);
 

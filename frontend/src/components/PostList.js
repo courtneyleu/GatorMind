@@ -17,8 +17,9 @@ const PostList = () => {
                     title: `hello`,
                     body : `hi`,
                     created_on: `11/13/2001`,
-                    last_modified: `11/12/2002`
-                }]
+                    last_modified: `11/12/2002`,
+                }
+        ]
                 setFeaturedBlog(res[0]);
             }
             catch (err) {
@@ -39,8 +40,20 @@ const PostList = () => {
                     body : `hi`,
                     created_on: `11/13/2001`,
                     last_modified: `11/12/2002`,
-                    slug: 12,
+                    slug: 0,
+                    likes: 50,
+                    comments: 100,
                 }
+                ,
+                { 
+                title: `hello`,
+                body : `hi`,
+                created_on: `11/13/2001`,
+                last_modified: `11/12/2002`,
+                slug: 1,
+                likes: 1,
+                comments: 4
+            }
             ]
                 setBlogs(res);
                 console.log(blogs);
@@ -66,26 +79,25 @@ const PostList = () => {
         
         blogs?.map(blogPost => {
             return list.push(
-                <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+                style = {{width: 1120}}>
                     <div className="col p-4 d-flex flex-column position-static">
 
                         <h3 className="mb-0">{blogPost.title}</h3>
                         <div className="mb-1 text-muted">{blogPost.created_on}</div>
                         <p className="card-text mb-auto">{blogPost.body}</p>
-                        <Link to={`/blog/${blogPost.slug}`} className="stretched-link">Continue reading</Link>
+                        <p>Likes: {blogPost.likes}   Comments: {blogPost.comments}</p>
+                        <Link to={`/post/${blogPost.slug}`} className="stretched-link">Continue reading</Link>
                     </div>
                 </div>
             );
         });
 
-        for (let i = 0; i < list.length; i += 2) {
+        for (let i = 0; i < list.length; i ++) {
             result.push(
                 <div key={i} className='row mb-2'>
                     <div className='col-md-6'>
                         {list[i]}
-                    </div>
-                    <div className='col-md-6'>
-                        {list[i+1] ? list[i+1] : null}
                     </div>
                 </div>
             )
@@ -118,7 +130,7 @@ const PostList = () => {
                     <h1 className="display-4 font-italic">{featuredBlog.title}</h1>
                     <p className="lead my-3">{featuredBlog.excerpt}</p>
                     <p className="lead mb-0">
-                        <Link to={`/blog/${featuredBlog.slug}`} className="text-white font-weight-bold">
+                        <Link to={`/post/${featuredBlog.slug}`} className="text-white font-weight-bold">
                             Continue reading...
                         </Link>
                     </p>

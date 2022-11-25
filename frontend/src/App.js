@@ -12,6 +12,7 @@ import {useAuthState} from "react-firebase-hooks/auth";
 import {auth, logout} from "./services/firebase"
 import {MDBIcon} from "mdb-react-ui-kit";
 import PostList from "./components/PostList";
+import Post from "./components/Post";
 
 function App(){
   const [user, loading, error] = useAuthState(auth);
@@ -89,6 +90,7 @@ function App(){
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path = "/posts" element = {<PostList/>}/>
+            <Route path = "/post/:id" element = {<Post/>}/>
           </Routes>
         </div>
       </div>

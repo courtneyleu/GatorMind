@@ -1,94 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import {collection, query, getDocs} from "firebase/firestore";
+import { db} from '../services/firebase'
 
 const PostList = () => {
     const [blogs, setBlogs] = useState([]);
     const [featuredBlog, setFeaturedBlog] = useState([]);
 
-    // make a dummy blog in json format.
-    //look into Json.stringify()
+   
+   
     useEffect(() => {
-        const fetchData = async () => {
+
+        const getPosts = async (user) => {
             try {
-              //  const res = await axios.get(`http://localhost:8000/api/blog/featured`);
-                //make res equal to something else.
-                const res = [{
-                    title: `hello`,
-                    body : `hi`,
-                    created_on: `11/13/2001`,
-                    last_modified: `11/12/2002`,
-                }
-        ]
-                setFeaturedBlog(res[0]);
+                const q = query(collection(db, "post"));
+                const doc = await getDocs(q);
+                console.log("getting docs now");
+                console.log(doc);
+                setBlogs(doc.docs);
+                setFeaturedBlog(doc.docs[0].data());
+                const data = doc.docs[3].data();
+                console.log("getting data from docs");
+                console.log(data);
             }
             catch (err) {
-
+                console.error(err);
             }
         }
 
-        fetchData();
+        getPosts();
     }, []);
 
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                //const res = await axios.get(`http://localhost:8000/api/post/`);
-                const res = [
-                   {
-                    title: `hello`,
-                    body : `hi`,
-                    created_on: `11/13/2001`,
-                    last_modified: `11/12/2002`,
-                    slug: 0,
-                    likes: 50,
-                    comments: 100,
-                }
-                ,
-                { 
-                title: `hello`,
-                body : `hi`,
-                created_on: `11/13/2001`,
-                last_modified: `11/12/2002`,
-                slug: 1,
-                likes: 1,
-                comments: 4
-            }
-            ]
-                setBlogs(res);
-                console.log(blogs);
-                console.log(res);
-            }
-            catch (err) {
 
-            }
-        }
-
-        fetchBlogs();
-    }, []);
-
-    const capitalizeFirstLetter = (word) => {
-        if (word)
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        return '';
-    };
-
+    
     const getBlogs = () => {
         let list = [];
         let result = [];
+        let i =-1;
         
         blogs?.map(blogPost => {
+             i++;
             return list.push(
                 <div className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
-                style = {{width: 1120}}>
+                style = {{width:1200}}>
                     <div className="col p-4 d-flex flex-column position-static">
+                        <h3 className="mb-0">{blogPost.data().title}</h3>
+                        <div className="mb-1 text-muted">Created On: {blogPost.data().created_on}</div>
+                        <div className="card-text mb-auto"
+                        style = {{fontSize:18}}>{blogPost.data().body}
+                        </div>
+                        <div style={{display: 'flex',columnGap: 60, alignItems: 'center', fontSize:18, fontWeight:'bold'}}>
+                            <div>Likes: {blogPost.data().likes}</div>   
+                        <div>Comments:</div>
+                        </div>
 
-                        <h3 className="mb-0">{blogPost.title}</h3>
-                        <div className="mb-1 text-muted">{blogPost.created_on}</div>
-                        <p className="card-text mb-auto">{blogPost.body}</p>
-                        <p>Likes: {blogPost.likes}   Comments: {blogPost.comments}</p>
-                        <Link to={`/post/${blogPost.slug}`} className="stretched-link">Continue reading</Link>
+                        <Link to={`/post/${i}`} className="stretched-link">Continue reading</Link>
                     </div>
+                    
                 </div>
             );
         });
@@ -128,7 +96,6 @@ const PostList = () => {
             <div className="jumbotron p-4 p-md-5 text-white rounded bg-dark">
                 <div className="col-md-6 px-0">
                     <h1 className="display-4 font-italic">{featuredBlog.title}</h1>
-                    <p className="lead my-3">{featuredBlog.excerpt}</p>
                     <p className="lead mb-0">
                         <Link to={`/post/${featuredBlog.slug}`} className="text-white font-weight-bold">
                             Continue reading...

@@ -13,7 +13,6 @@ import {auth, logout} from "./services/firebase"
 import {MDBIcon} from "mdb-react-ui-kit";
 import PostList from "./components/PostList";
 import Post from "./components/Post";
-
 function App(){
   const [user, loading, error] = useAuthState(auth);
   console.log(useAuthState(auth));

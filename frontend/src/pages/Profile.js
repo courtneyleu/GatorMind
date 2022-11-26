@@ -1,6 +1,6 @@
 import { Col, Container, Row, Image } from "react-bootstrap";
 import { CircleFill, Gear } from "react-bootstrap-icons";
-
+import CreatePost from "../components/CreatePost";
 const Profile = () => {
   return (
     <div className="d-grid gap-md-3">
@@ -41,7 +41,6 @@ const Profile = () => {
               </center>
             </div>
           </div>
-
           <div className="col">
             <div className="p-2 bg-light border">
               <p className="h6">Create Your Own Post...</p>

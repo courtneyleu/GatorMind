@@ -1,7 +1,43 @@
 import { Col, Container, Row, Image } from "react-bootstrap";
 import { CircleFill, Gear } from "react-bootstrap-icons";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [featuredBlog, setFeaturedBlog] = useState([]);
+
+    //dummy data for profile
+    useEffect(() => {
+      const fetchUserData = async () => {
+          try {
+            //  const res = await axios.get(`http://localhost:8000/api/blog/featured`);
+              //make res equal to something else.
+              const res = {
+                  name: `Maya Singh`,
+                  follwers: `112`,
+                  following: '98',
+                  totalPosts: "8",
+                  totalLikes: '129',
+                  totalComments: '8',
+                  created_on: `11/18/2022`,
+                  last_modified: `11/18/2022`
+              }
+              setFeaturedBlog(res);
+              console.log(res)
+          }
+          catch (err) {
+
+          }
+      }
+
+      fetchUserData();
+  }, []);
+
+
+
+
   return (
     <div className="d-grid gap-md-3">
       <div className="p-3"></div>
@@ -16,7 +52,7 @@ const Profile = () => {
                   </center>
                 </div>
                 <div className="col">
-                  <h2>"NAME"</h2>
+                  <h2>name</h2>
                 </div>
               </div>
               <center>
@@ -35,6 +71,7 @@ const Profile = () => {
                     Settings
                   </button>
                   <p className="lead">Total Posts: </p>
+                  featuredBlog.totalPosts
                   <p className="lead">Total Likes: </p>
                   <p className="lead">Total Comments: </p>
                 </div>
@@ -155,8 +192,4 @@ const Profile = () => {
     </div>
   );
 };
-
-//make map here
-
-
 export default Profile;

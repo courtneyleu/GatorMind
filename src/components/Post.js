@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Link , useLocation} from 'react-router-dom';
 import axios from 'axios';
 
 const Post = (props) => {
@@ -12,6 +13,21 @@ const Post = (props) => {
             try {
                 const res = await axios.get(`${'http://localhost:8000'}/api/post/${slug}`);
                 setBlog(res.data);
+        const slug = props.stuff;
+        console.log(slug);
+        const fetchData = async () => {
+            try {
+              //  const res = await axios.get(`${'http://localhost:8000'}/api/post/${slug}`);
+            const res = [
+                {
+                 title: `hello`,
+                 body : `hi`,
+                 created_on: `11/13/2001`,
+                 last_modified: `11/12/2002`,
+                 slug: 0,
+             }
+         ]
+              setBlog(res[slug]);
             }
             catch (err) {
 
@@ -20,6 +36,7 @@ const Post = (props) => {
 //title, body , created-on, last-modified (may want to add category section as well)
         fetchData();
     }, [props.match.params.id]);
+ 
 
     const createBlog = () => {
         return {__html: blog.body}

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component, useState} from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./pages/Login";
@@ -15,8 +15,17 @@ import PostList from "./components/PostList";
 import Post from "./components/Post";
 function App(){
   const [user, loading, error] = useAuthState(auth);
+  const[search, SetSearch] = useState("");
+  const [blogs, setBlogs] = useState([]);
   console.log(useAuthState(auth));
 
+   const SearchBlog=(e)=>{
+        e.preventDefault();
+        setBlogs(blogs.filter((blogs)=>
+            blogs.data().title.toLowerCase().includes(search.toLowerCase())||
+            blogs.data().body.toLowerCase().includes(search.toLowerCase())
+        ));
+    };
   return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
@@ -26,6 +35,12 @@ function App(){
             </a>
           {user &&
           <div className="navbar-nav ml-auto">
+              <li className='nav-item'>
+              <form onSubmit={(e)=>{SearchBlog()}}>
+                  <input onChange={(e)=>{SetSearch(e.target.value)}}/>
+                  <button type="submit">Search</button>
+              </form>
+            </li>
             <li className='nav-item'>
               <button type="button" className="btn btn-dark">
                 <Link className='nav-link' to='/home'>

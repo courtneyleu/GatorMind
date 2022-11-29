@@ -3,6 +3,32 @@ import {auth, db} from '../services/firebase'
 
 
 
+const fetchFirstName= async (user) => {
+    try {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+        const doc = await getDocs(q);
+        const data = doc.docs[0].data();
+        let following = data.firstName;
+        return (following);
+    }
+    catch (err) {
+        console.error(err);
+    }
+};
+
+
+const fetchLastName= async (user) => {
+    try {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+        const doc = await getDocs(q);
+        const data = doc.docs[0].data();
+        let following = data.lastName;
+        return (following);
+    }
+    catch (err) {
+        console.error(err);
+    }
+};
 
 const getFollowers = async (user) => {
     try {
@@ -15,7 +41,7 @@ const getFollowers = async (user) => {
     catch (err) {
         console.error(err);
     }
-}
+};
 
 
 const fetchUserName = async (user) => {
@@ -23,6 +49,7 @@ const fetchUserName = async (user) => {
         const q = query(collection(db, "users"), where("uid", "==", user?.uid));
         const doc = await getDocs(q);
         const data = doc.docs[0].data();
+        console.log(data);
         let username = data.username;
         return(username);
     }
@@ -31,6 +58,7 @@ const fetchUserName = async (user) => {
     }
 };
 
+
 const getFollowing = async (user) => {
     try {
         const q = query(collection(db, "users"), where("uid", "==", user?.uid));
@@ -38,6 +66,18 @@ const getFollowing = async (user) => {
         const data = doc.docs[0].data();
         let following = data.following;
         return (following);
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+const getPostsLength = async (user) => {
+    try {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+        const doc = await getDocs(q);
+        const data = doc.docs[0].data();
+        let posts = data.posts.length;
+        return (posts);
     }
     catch (err) {
         console.error(err);
@@ -57,5 +97,21 @@ const getPosts = async (user) => {
     }
 }
 
+const getEmail = async (user) => {
+    try {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+        const doc = await getDocs(q);
+        const data = doc.docs[0].data();
+        let posts = data.email;
+        return (posts);
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
 
-export {getFollowers, fetchUserName, getFollowing, getPosts};
+
+
+
+export {getFollowers, fetchUserName, getFollowing, getPosts, getPostsLength, fetchLastName, fetchFirstName
+,getEmail};

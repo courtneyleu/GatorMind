@@ -15,7 +15,7 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-   apiKey: "secret",
+  apiKey: "secret",
     authDomain: "secret",
     projectId: "secret",
     storageBucket: "secret",

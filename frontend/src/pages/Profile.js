@@ -1,7 +1,45 @@
 import { Col, Container, Row, Image } from "react-bootstrap";
 import { CircleFill, Gear } from "react-bootstrap-icons";
-import CreatePost from "../components/CreatePost";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {fetchUserName, getFollowers, getPostsLength, getFollowing, fetchFirstName, fetchLastName} from '../components/Account'
+import { auth, db, logout } from "../services/firebase";
+import {useAuthState} from "react-firebase-hooks/auth";
 const Profile = () => {
+
+  const [user, loading, error] = useAuthState(auth);
+  const [name, setName] = useState("");
+  const [followers, setFollowers] = useState(0);
+  const [following, setFollowing] = useState(0);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const navigate = useNavigate();
+
+  let promiseName = fetchUserName(user);
+  promiseName.then(
+      function(value) {setName(value);},
+      function(error) {setName("error");}
+  );
+  let promiseFollowing = getFollowers(user);
+  promiseFollowing.then(
+      function(value) {setFollowers(value);},
+      function(error) {setName("error");}
+  );
+
+  let promiseTotalPosts = getPostsLength(user);
+  promiseTotalPosts.then(
+      function(value) {setTotalPosts(value);},
+      function(error) {setName("error");}
+  );
+
+  let promiseFollowers = getFollowing(user);
+  promiseFollowers.then(
+    function(value) {setFollowing(value);},
+    function(error) {setName("error");}
+);
+  useEffect(() => {
+      if (loading) return;
+      if (!user) return navigate("/");
+  }, [user, loading]);
   return (
     <div className="d-grid gap-md-3">
       <div className="p-3"></div>
@@ -16,7 +54,7 @@ const Profile = () => {
                   </center>
                 </div>
                 <div className="col">
-                  <h2>"NAME"</h2>
+                  <h2>{""+name}</h2>
                 </div>
               </div>
               <center>
@@ -24,17 +62,17 @@ const Profile = () => {
                   <div className="p-1"></div>
                   <div className="row align-items-center">
                     <div className="col">
-                      <button className="btn btn-primary">Followers:</button>
+                      <button className="btn btn-primary">{"Followers:" + followers}</button>
                     </div>
                     <div className="col">
-                      <button className="btn btn-primary">Following:</button>
+                      <button className="btn btn-primary">{"Following: " + following}</button>
                     </div>
                   </div>
                   <button className="btn btn-secondary">
                     <Gear />
                     Settings
                   </button>
-                  <p className="lead">Total Posts: </p>
+                  <p className="lead">{"Total Posts: " + totalPosts } </p>
                   <p className="lead">Total Likes: </p>
                   <p className="lead">Total Comments: </p>
                 </div>

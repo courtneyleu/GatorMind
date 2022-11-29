@@ -14,62 +14,6 @@ const Post = (props) => {
     const location = useLocation();
     const slug = location.pathname.substring(6);
    console.log(slug);
-   /* useEffect(() => {
-
-        const getPost = async (user) => {
-            try {
-                const q = query(collection(db, "post"));
-                const doc = await getDocs(q);
-                console.log("getting docs now");
-                console.log(doc);
-                setBlog(doc.docs[0]);
-                console.log(blog.data());
-                setLikes(doc.docs[slug].likes);
-                const data = doc.docs[3].data();
-                console.log("getting data from docs");
-                console.log(data);
-
-               return data;
-            }
-            catch (err) {
-                console.error(err);
-            }
-        }
-
-      /*  const fetchData = async () => {
-            try {
-               // const res = await axios.get(`${'http://localhost:8000'}/api/post/${slug}`);
-               const res = [
-               {
-                title: `hello`,
-                body : `hi`,
-                created_on: `11/13/2001`,
-                last_modified: `11/12/2002`,
-                slug: 12,
-                likes: 50,
-                comments: 100,
-            }
-            ,
-            { 
-            title: `hello`,
-            body : `hi`,
-            created_on: `11/13/2001`,
-            last_modified: `11/12/2002`,
-            likes: 1,
-            comments: 4
-        }
-        ]
-                setBlog(res[slug]);
-                setLikes(res[slug].likes);
-            }
-            catch (err) {
-
-            }
-        };
-//title, body , created-on, last-modified (may want to add category section as well)
-       //fetchData();
-       getPost();
-    }, []);*/
     useEffect(() => {
 
         const getPosts = async (user) => {

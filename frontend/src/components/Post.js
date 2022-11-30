@@ -19,11 +19,14 @@ import {
 	collection,
 	query,
 	where,
+    increment,
 	updateDoc,
 	getDocs,
 	arrayUnion,
+    getDoc,
 } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { FirebaseError } from "firebase/app";
 
 const Post = (props) => {
 	const [blog, setBlog] = useState({});
@@ -39,7 +42,6 @@ const Post = (props) => {
 	const slug = location.pathname.substring(6);
 	const uid = user.uid;
 
-	console.log(slug);
 
 	useEffect(() => {
 		const getPosts = async (user) => {
@@ -52,7 +54,7 @@ const Post = (props) => {
 				setTitle(doc.docs[slug].data().title);
 				setBody(doc.docs[slug].data().body);
 				setCreated(doc.docs[slug].data().created_on);
-				console.log(createdOn);
+                console.log(doc.docs[slug])
 				console.log("getting data from docs");
 			} catch (err) {
 				console.error(err);
@@ -80,7 +82,8 @@ const Post = (props) => {
 			};
 			await setDoc(newComment, data);
 
-			const blogDoc = doc(blog.id);
+			const blogDoc = await getDoc(blog.id);
+            console.log(blogDoc);
 			await updateDoc(blogDoc, {
 				comment: arrayUnion(newComment),
 			});
@@ -91,19 +94,38 @@ const Post = (props) => {
 		return { __html: body };
 	};
 
-	const postLiked = () => {
+	const postLiked = async () => {
 		setLiked(!liked);
 		console.log(liked);
 		const btn = document.getElementById("btn");
 		if (!liked) {
 			setLikes((likes) => likes + 1);
-			console.log(likes);
 			btn.style.backgroundColor = "blue";
-		} else {
+            console.log(blog.id);
+          const thepost = doc(db, "post", `${blog.id}`);
+          
+
+// Atomically increment the population of the city by 50.
+     await updateDoc(thepost, {
+            likes: increment(1)
+                });
+		
+        } 
+    else {
 			setLikes((likes) => likes - 1);
 			btn.style.backgroundColor = "lightgray";
+            
+            const thepost = doc(db, "post", `${blog.id}`);
+
+            // Atomically increment the population of the city by 50.
+                 await updateDoc(thepost, {
+                        likes: increment(-1)
+                            });
+
+
 		}
-	};
+
+    };
 	return (
 		<div className="container mt-3">
 			<h1 className="display-2">{title}</h1>

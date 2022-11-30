@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { collection, query, getDocs } from "firebase/firestore";
 import { db } from "../services/firebase";
-import Button from "react-bootstrap/Button";
 
 const PostList = () => {
   const [blogs, setBlogs] = useState([]);
@@ -17,7 +16,7 @@ const PostList = () => {
         console.log(doc);
         setBlogs(doc.docs);
         setFeaturedBlog(doc.docs[0].data());
-        const data = doc.docs[3].data();
+        const data = doc.docs[0].data();
         console.log("getting data from docs");
         console.log(data);
       } catch (err) {
@@ -28,6 +27,10 @@ const PostList = () => {
     getPosts();
   }, []);
 
+const incrementLike = () =>{
+
+
+};
   const getBlogs = () => {
     let list = [];
     let result = [];
@@ -58,7 +61,7 @@ const PostList = () => {
               }}
             >
               <div>
-                <button className="btn btn-danger" size="sm">
+                <button className="btn btn-danger" onClick = {incrementLike} size="sm">
                   like{" "}
                 </button>{" "}
                 {blogPost.data().likes}
@@ -66,14 +69,14 @@ const PostList = () => {
               <div>Comments:</div>
             </div>
 
-            <Link to={`/post/${i}`} className="stretched-link">
+            <Link to={`/post/${i}`} >
               Continue reading
             </Link>
           </div>
         </div>
       );
     });
-
+/*className="stretched-link"*/
     for (let i = 0; i < list.length; i++) {
       result.push(
         <div key={i} className="row mb-2">

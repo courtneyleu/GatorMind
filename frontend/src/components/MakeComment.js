@@ -61,7 +61,7 @@ function MakeComment() {
 
 	useEffect(() => {
 		if (loading) return;
-		if (user) navigate("/home");
+		//if (user) navigate("/home");
 	}, [user, loading]);
 
 	return (

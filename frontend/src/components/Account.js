@@ -113,7 +113,7 @@ const getEmail = async (user) => {
 	}
 };
 
-// get the user like
+// get the user likes the user has recieved on their posts
 const getUserLikes = async (user) => {
 	try {
 		// get the users document
@@ -138,6 +138,7 @@ const getUserLikes = async (user) => {
 	}
 };
 
+// get the number of comments the user has recieved on the posts
 const getUserComments = async (user) => {
 	try {
 		// get the users document
@@ -147,7 +148,7 @@ const getUserComments = async (user) => {
 		// use the posts array to get the post documents
 		let posts = data.posts;
 		let comments = 0;
-		// cycle through posts to add likes
+		// cycle through posts to add number of comments
 		for (let i = 0; i < posts.length; i++) {
 			const postDoc = await getDoc(posts[i]);
 			const postData = postDoc.data();

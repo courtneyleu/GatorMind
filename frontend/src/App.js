@@ -37,12 +37,12 @@ function App() {
 	};
 	return (
 		<div>
-			<nav className="navbar navbar-expand navbar-dark bg-dark">
-				<a className="navbar-brand" href="#">
-					<MDBIcon fas icon="brain" />
-					GatorMind
-				</a>
-				{user && (
+			{user && (
+				<nav className="navbar navbar-expand navbar-dark bg-dark">
+					<a className="navbar-brand" href="#">
+						<MDBIcon fas icon="brain" />
+						GatorMind
+					</a>
 					<div className="navbar-nav ml-auto">
 						<li className="nav-item">
 							<form
@@ -87,23 +87,8 @@ function App() {
 							</button>
 						</li>
 					</div>
-				)}
-				{!user && (
-					<div className="navbar-nav ml-auto">
-						<li className="nav-item">
-							<Link to={"/login"} className="nav-link">
-								Login
-							</Link>
-						</li>
-
-						<li className="nav-item">
-							<Link to={"/register"} className="nav-link">
-								Sign Up
-							</Link>
-						</li>
-					</div>
-				)}
-			</nav>
+				</nav>
+			)}
 
 			<div className="container mt-3">
 				<Routes>

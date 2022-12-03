@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth, db } from "../services/firebase";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {auth, db} from "../services/firebase";
 import Select from "react-select";
-import { useAuthState } from "react-firebase-hooks/auth";
+import {useAuthState} from "react-firebase-hooks/auth";
 import {
 	MDBBtn,
 	MDBCard,
@@ -26,18 +26,18 @@ import {
 } from "firebase/firestore";
 
 const options = [
-	{ value: "a", label: "a" },
-	{ value: "b", label: "b" },
+	{value: "a", label: "a"},
+	{value: "b", label: "b"},
 ];
 
-function MakeComment() {
+function MakeComment(postID) {
 	const [user, loading, error] = useAuthState(auth);
 	const [body, setBody] = useState("");
 	const [created_on, setDate] = useState("");
 	const navigate = useNavigate();
 
 	const uid = user.uid;
-	const makePost = async () => {
+	const makeComment = async () => {
 		if (!body) {
 			document.getElementById("form").reset();
 			if (!body) {
@@ -55,7 +55,10 @@ function MakeComment() {
 			};
 			await setDoc(newComment, data);
 
-			// TODO: add comment to post -> need the post id
+			const blogDoc = doc(db, "post", `${postID}`);
+			await updateDoc(blogDoc, {
+				comment: arrayUnion(newComment),
+			});
 		}
 	};
 
@@ -70,15 +73,12 @@ function MakeComment() {
 				<MDBCol>
 					<MDBCard
 						className="bg-white my-5 mx-auto"
-						style={{ borderRadius: "1rem", maxWidth: "500px" }}
+						style={{borderRadius: "1rem", maxWidth: "500px"}}
 					>
 						<MDBCardBody className="p-5 w-100 d-flex flex-column">
 							<h2 className="fw-bold mb-5">Comment</h2>
 
-							<MDBValidation
-								className="row g-3"
-								id="form"
-							>
+							<MDBValidation className="row g-3" id="form">
 								<MDBTextArea
 									wrapperClass="mb-4"
 									label="What is on your mind?"
@@ -89,11 +89,7 @@ function MakeComment() {
 									onChange={(e) => setBody(e.target.value)}
 								/>
 
-								<MDBBtn
-									className="w-100 mb-4"
-									size="md"
-									onClick={makePost}
-								>
+								<MDBBtn className="w-100 mb-4" size="md" onClick={makeComment}>
 									Comment
 								</MDBBtn>
 							</MDBValidation>

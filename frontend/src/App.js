@@ -1,5 +1,5 @@
-import React, {Component, useState} from "react";
-import {Routes, Route, Link} from "react-router-dom";
+import React, {Component, useState, useEffect} from "react";
+import {Routes, Route, Link, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -23,6 +23,7 @@ function App() {
 	const [user, loading, error] = useAuthState(auth);
 	const [search, SetSearch] = useState("");
 	const [blogs, setBlogs] = useState([]);
+	const navigate = useNavigate();
 	console.log(useAuthState(auth));
 
 	const SearchBlog = (e) => {
@@ -35,14 +36,26 @@ function App() {
 			)
 		);
 	};
+
+	useEffect(() => {
+		if (loading) {
+			return;
+		}
+		if (user) {
+			navigate("/home");
+		} else if (user == null) {
+			navigate("/login");
+		}
+	}, [user, loading]);
+
 	return (
 		<div>
-			<nav className="navbar navbar-expand navbar-dark bg-dark">
-				<a className="navbar-brand" href="#">
-					<MDBIcon fas icon="brain" />
-					GatorMind
-				</a>
-				{user && (
+			{user && (
+				<nav className="navbar navbar-expand navbar-dark bg-dark">
+					<a className="navbar-brand" href="#">
+						<MDBIcon fas icon="brain" />
+						GatorMind
+					</a>
 					<div className="navbar-nav ml-auto">
 						<li className="nav-item">
 							<form
@@ -87,23 +100,8 @@ function App() {
 							</button>
 						</li>
 					</div>
-				)}
-				{!user && (
-					<div className="navbar-nav ml-auto">
-						<li className="nav-item">
-							<Link to={"/login"} className="nav-link">
-								Login
-							</Link>
-						</li>
-
-						<li className="nav-item">
-							<Link to={"/register"} className="nav-link">
-								Sign Up
-							</Link>
-						</li>
-					</div>
-				)}
-			</nav>
+				</nav>
+			)}
 
 			<div className="container mt-3">
 				<Routes>

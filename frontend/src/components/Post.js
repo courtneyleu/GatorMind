@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {Link, useLocation} from "react-router-dom";
 import axios from "axios";
-import { auth, db } from "../services/firebase";
+import {auth, db} from "../services/firebase";
 import {
 	MDBBtn,
 	MDBCard,
@@ -19,14 +19,14 @@ import {
 	collection,
 	query,
 	where,
-    increment,
+	increment,
 	updateDoc,
 	getDocs,
 	arrayUnion,
-    getDoc,
+	getDoc,
 } from "firebase/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { FirebaseError } from "firebase/app";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {FirebaseError} from "firebase/app";
 
 const Post = (props) => {
 	const [blog, setBlog] = useState({});
@@ -42,7 +42,6 @@ const Post = (props) => {
 	const slug = location.pathname.substring(6);
 	const uid = user.uid;
 
-
 	useEffect(() => {
 		const getPosts = async (user) => {
 			try {
@@ -54,7 +53,7 @@ const Post = (props) => {
 				setTitle(doc.docs[slug].data().title);
 				setBody(doc.docs[slug].data().body);
 				setCreated(doc.docs[slug].data().created_on);
-                console.log(doc.docs[slug])
+				console.log(doc.docs[slug]);
 				console.log("getting data from docs");
 			} catch (err) {
 				console.error(err);
@@ -82,8 +81,7 @@ const Post = (props) => {
 			};
 			await setDoc(newComment, data);
 
-			const blogDoc = await getDoc(blog.id);
-            console.log(blogDoc);
+			const blogDoc = doc(db, "post", `${blog.id}`);
 			await updateDoc(blogDoc, {
 				comment: arrayUnion(newComment),
 			});
@@ -91,7 +89,7 @@ const Post = (props) => {
 	};
 
 	const createBlog = () => {
-		return { __html: body };
+		return {__html: body};
 	};
 
 	const postLiked = async () => {
@@ -101,40 +99,31 @@ const Post = (props) => {
 		if (!liked) {
 			setLikes((likes) => likes + 1);
 			btn.style.backgroundColor = "blue";
-            console.log(blog.id);
-          const thepost = doc(db, "post", `${blog.id}`);
-          
+			console.log(blog.id);
+			const thepost = doc(db, "post", `${blog.id}`);
 
-// Atomically increment the population of the city by 50.
-     await updateDoc(thepost, {
-            likes: increment(1)
-                });
-		
-        } 
-    else {
+			// Atomically increment the population of the city by 50.
+			await updateDoc(thepost, {
+				likes: increment(1),
+			});
+		} else {
 			setLikes((likes) => likes - 1);
 			btn.style.backgroundColor = "lightgray";
-            
-            const thepost = doc(db, "post", `${blog.id}`);
 
-            // Atomically increment the population of the city by 50.
-                 await updateDoc(thepost, {
-                        likes: increment(-1)
-                            });
+			const thepost = doc(db, "post", `${blog.id}`);
 
-
+			// Atomically increment the population of the city by 50.
+			await updateDoc(thepost, {
+				likes: increment(-1),
+			});
 		}
-
-    };
+	};
 	return (
 		<div className="container mt-3">
 			<h1 className="display-2">{title}</h1>
 			<h2 className="text-muted mt-3">Category:</h2>
 			<h4>{createdOn}</h4>
-			<div
-				className="mt-5 mb-5"
-				dangerouslySetInnerHTML={createBlog()}
-			/>
+			<div className="mt-5 mb-5" dangerouslySetInnerHTML={createBlog()} />
 			<div
 				style={{
 					display: "flex",
@@ -143,10 +132,7 @@ const Post = (props) => {
 					fontWeight: "bold",
 				}}
 			>
-				<button
-					id="btn"
-					onClick={postLiked}
-				>
+				<button id="btn" onClick={postLiked}>
 					{" "}
 					<img
 						src="https://cdn.pixabay.com/photo/2021/10/11/00/58/star-6699070_960_720.png"
@@ -161,10 +147,7 @@ const Post = (props) => {
 				<MDBCardBody className="p-5 w-100 flex-column">
 					<h2 className=" mb-5">Comment</h2>
 
-					<MDBValidation
-						className="row g-3"
-						id="form"
-					>
+					<MDBValidation className="row g-3" id="form">
 						<MDBTextArea
 							wrapperClass="mb-2"
 							label="Comment"
@@ -175,11 +158,7 @@ const Post = (props) => {
 							onChange={(e) => setCommentBody(e.target.value)}
 						/>
 
-						<MDBBtn
-							className="w-100 mb-2"
-							size="md"
-							onClick={makeComment}
-						>
+						<MDBBtn className="w-100 mb-2" size="md" onClick={makeComment}>
 							Comment
 						</MDBBtn>
 					</MDBValidation>
@@ -187,10 +166,7 @@ const Post = (props) => {
 			</MDBCard>
 			<hr />
 			<p className="lead mb-5">
-				<Link
-					to="/home"
-					className="font-weight-bold"
-				>
+				<Link to="/posts" className="font-weight-bold">
 					Back to Posts
 				</Link>
 			</p>

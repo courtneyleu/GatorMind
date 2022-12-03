@@ -188,7 +188,7 @@ const Post = (props) => {
 			<hr />
 			<p className="lead mb-5">
 				<Link
-					to="/posts"
+					to="/home"
 					className="font-weight-bold"
 				>
 					Back to Posts

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, query, getDocs } from "firebase/firestore";
+import { 	doc,
+  increment,
+updateDoc, collection, query, getDocs } from "firebase/firestore";
 import { db } from "../services/firebase";
-
 const PostList = () => {
   const [blogs, setBlogs] = useState([]);
   const [featuredBlog, setFeaturedBlog] = useState([]);
-
+  const [liked, setLiked] = useState(false);
+	const [likes, setLikes] = useState();
   useEffect(() => {
     const getPosts = async (user) => {
       try {
@@ -27,10 +29,40 @@ const PostList = () => {
     getPosts();
   }, []);
 
-const incrementLike = () =>{
+
+	const postLiked = async () => {
+		setLiked(!liked);
+		console.log(liked);
+		const btn = document.getElementById("btn");
+		if (!liked) {
+			setLikes((likes) => likes + 1);
+			btn.style.backgroundColor = "blue";
+            console.log(blog.id);
+          const thepost = doc(db, "post", `${blog.id}`);
+          
+
+// Atomically increment the population of the city by 50.
+     await updateDoc(thepost, {
+            likes: increment(1)
+                });
+		
+        } 
+    else {
+			setLikes((likes) => likes - 1);
+			btn.style.backgroundColor = "lightgray";
+            
+            const thepost = doc(db, "post", `${blog.id}`);
+
+            // Atomically increment the population of the city by 50.
+                 await updateDoc(thepost, {
+                        likes: increment(-1)
+                            });
 
 
-};
+		}
+
+    };
+
   const getBlogs = () => {
     let list = [];
     let result = [];
@@ -61,7 +93,7 @@ const incrementLike = () =>{
               }}
             >
               <div>
-                <button className="btn btn-danger" onClick = {incrementLike} size="sm">
+                <button className="btn btn-danger" onClick = {postLiked} size="sm">
                   like{" "}
                 </button>{" "}
                 {blogPost.data().likes}

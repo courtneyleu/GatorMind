@@ -21,7 +21,8 @@ class Post(models.Model):
                                 on_delete=models.CASCADE,
                                 default=0)
     likes = models.IntegerField(default=0)
-
+    first = models.CharField(max_length=255)
+    last = models.CharField(max_length=255)
     class Meta:
         ordering = ['title']
 

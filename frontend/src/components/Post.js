@@ -26,7 +26,6 @@ import {
 	getDoc,
 } from "firebase/firestore";
 import {useAuthState} from "react-firebase-hooks/auth";
-import {FirebaseError} from "firebase/app";
 
 const Post = (props) => {
 	const [blog, setBlog] = useState({});
@@ -37,6 +36,8 @@ const Post = (props) => {
 	const [liked, setLiked] = useState(false);
 	const [createdOn, setCreated] = useState();
 	const [user, loading, error] = useAuthState(auth);
+	const[fname, setFirst] = useState("");
+	const [lname, setLast] = useState("");
 
 	const location = useLocation();
 	const slug = location.pathname.substring(6);
@@ -53,6 +54,8 @@ const Post = (props) => {
 				setTitle(doc.docs[slug].data().title);
 				setBody(doc.docs[slug].data().body);
 				setCreated(doc.docs[slug].data().created_on);
+				setFirst(doc.docs[slug].data().first);
+				setLast(doc.docs[slug].data().last);
 				console.log(doc.docs[slug]);
 				console.log("getting data from docs");
 			} catch (err) {
@@ -122,6 +125,7 @@ const Post = (props) => {
 		<div className="container mt-3">
 			<h1 className="display-2">{title}</h1>
 			<h2 className="text-muted mt-3">Category:</h2>
+			<h3>Author: {fname + " " + lname}</h3>
 			<h4>{createdOn}</h4>
 			<div className="mt-5 mb-5" dangerouslySetInnerHTML={createBlog()} />
 			<div
@@ -132,7 +136,7 @@ const Post = (props) => {
 					fontWeight: "bold",
 				}}
 			>
-				<button id="btn" onClick={postLiked}>
+				<button id="btn" onClick = {postLiked}>
 					{" "}
 					<img
 						src="https://cdn.pixabay.com/photo/2021/10/11/00/58/star-6699070_960_720.png"
@@ -166,7 +170,7 @@ const Post = (props) => {
 			</MDBCard>
 			<hr />
 			<p className="lead mb-5">
-				<Link to="/posts" className="font-weight-bold">
+				<Link to="/home" className="font-weight-bold">
 					Back to Posts
 				</Link>
 			</p>

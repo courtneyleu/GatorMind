@@ -15,27 +15,13 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  /*apiKey: "secret",
+  apiKey: "secret",
     authDomain: "secret",
     projectId: "secret",
     storageBucket: "secret",
     messagingSenderId: "secret",
     appId: "secret",
-    measurementId: "secret"*/
-    apiKey: "AIzaSyAVijNTKy2UpmytW0Fnyr_eRz8CZYkBIZU",
-
-    authDomain: "gator-mind.firebaseapp.com",
-  
-    projectId: "gator-mind",
-  
-    storageBucket: "gator-mind.appspot.com",
-  
-    messagingSenderId: "793974744981",
-  
-    appId: "1:793974744981:web:9d9aed0d8d4e91483cb89c",
-  
-    measurementId: "G-2JVXCHXXJF"
-  
+    measurementId: "secret"
   
 }
 

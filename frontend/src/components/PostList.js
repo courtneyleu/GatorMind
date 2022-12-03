@@ -1,26 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { 	doc,
-  increment,
-updateDoc, collection, query, getDocs } from "firebase/firestore";
+import {collection, query, getDocs } from "firebase/firestore";
 import { db } from "../services/firebase";
 const PostList = () => {
   const [blogs, setBlogs] = useState([]);
   const [featuredBlog, setFeaturedBlog] = useState([]);
-  const [liked, setLiked] = useState(false);
-	const [likes, setLikes] = useState();
+  //const [liked, setLiked] = useState(false);
+//	const [likes, setLikes] = useState();
   useEffect(() => {
     const getPosts = async (user) => {
       try {
         const q = query(collection(db, "post"));
         const doc = await getDocs(q);
-        console.log("getting docs now");
-        console.log(doc);
         setBlogs(doc.docs);
         setFeaturedBlog(doc.docs[0].data());
-        const data = doc.docs[0].data();
-        console.log("getting data from docs");
-        console.log(data);
       } catch (err) {
         console.error(err);
       }
@@ -30,15 +23,16 @@ const PostList = () => {
   }, []);
 
 
-	const postLiked = async () => {
+/*	const postLiked = async (props) => {
 		setLiked(!liked);
 		console.log(liked);
 		const btn = document.getElementById("btn");
 		if (!liked) {
 			setLikes((likes) => likes + 1);
 			btn.style.backgroundColor = "blue";
-            console.log(blog.id);
-          const thepost = doc(db, "post", `${blog.id}`);
+      console.log(props);
+       console.log(doc.docs[props]);
+          const thepost = doc(db, "post", `${doc.docs[props].id}`);
           
 
 // Atomically increment the population of the city by 50.
@@ -51,7 +45,7 @@ const PostList = () => {
 			setLikes((likes) => likes - 1);
 			btn.style.backgroundColor = "lightgray";
             
-            const thepost = doc(db, "post", `${blog.id}`);
+            const thepost = doc(db, "post", `${doc.docs[props].id}`);
 
             // Atomically increment the population of the city by 50.
                  await updateDoc(thepost, {
@@ -62,7 +56,7 @@ const PostList = () => {
 		}
 
     };
-
+*/
   const getBlogs = () => {
     let list = [];
     let result = [];
@@ -80,6 +74,9 @@ const PostList = () => {
             <div className="mb-1 text-muted">
               Created On: {blogPost.data().created_on}
             </div>
+            <div>
+              Author: { blogPost.data().first + " " + blogPost.data().last}
+            </div>
             <div className="card-text mb-auto" style={{ fontSize: 18 }}>
               {blogPost.data().body}
             </div>
@@ -93,7 +90,7 @@ const PostList = () => {
               }}
             >
               <div>
-                <button className="btn btn-danger" onClick = {postLiked} size="sm">
+                <button className="btn btn-danger" id = 'btn' size="sm">
                   like{" "}
                 </button>{" "}
                 {blogPost.data().likes}

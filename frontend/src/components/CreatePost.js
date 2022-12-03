@@ -3,6 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {auth, db} from "../services/firebase";
 import Select from 'react-select';
 import { useAuthState } from "react-firebase-hooks/auth";
+import {fetchFirstName, fetchLastName} from "./Account";
 import {
     MDBBtn,
     MDBCard,
@@ -26,10 +27,12 @@ function CreatePost() {
     const [body, setBody] = useState("");
     const [created_on, setDate] = useState("");
     const [category, setCategory] = useState();
+    const [fname, setFirstName] = useState("");
+    const [lname, setLastName] = useState("");
+    const [dataIsSet, setData]  = useState(false);
     const navigate = useNavigate();
 
     const uid = user.uid;   // use to link the post to user
-
     const makePost = async () => {
         if (!title || !body) {
             document.getElementById('form').reset();
@@ -42,16 +45,18 @@ function CreatePost() {
         }
          else {
                 // add post to database
-                let today = new Date().toISOString().slice(0, 10);
-                setDate(today);
+                await getData();
                 const newPost = doc(collection(db, "post"));
+                
                 const data = {
                     uid: uid,
                     title: title,
                     body: body,
                     category: category,
                     created_on: created_on,
-                    likes: 0
+                    likes: 0,
+                    first:fname,
+                    last: lname,
                 }
                 await setDoc(newPost, data);
 
@@ -71,6 +76,7 @@ function CreatePost() {
     }
     const handleChange = (options) => {
         setCategory(options);
+        getData();
     };
 
     useEffect(() => {
@@ -78,6 +84,17 @@ function CreatePost() {
         if (user) navigate("/home");
     }, [user, loading]);
 
+    const getData = async () =>{
+        const today = new Date().toISOString().slice(0, 10);
+    
+                    const last= await fetchLastName(user);
+                    const first = await fetchFirstName(user);
+                    console.log(last);
+                    console.log(first);
+                    setDate(today);
+                    setLastName(last);
+                    setFirstName(first);
+    }
     return (
         <MDBContainer fluid>
             <MDBRow>

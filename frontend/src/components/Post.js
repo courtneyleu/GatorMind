@@ -17,6 +17,7 @@ import {
 	updateDoc,
 	getDocs,
 	arrayUnion,
+	getDoc,
 } from "firebase/firestore";
 import {Heart} from "react-bootstrap-icons";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -32,7 +33,7 @@ const Post = (props) => {
 	const [createdOn, setCreated] = useState();
 	const [user, loading, error] = useAuthState(auth);
 	const [userName, setUserName] = useState();
-	const [commentUserName, setCommentUserName] = useState();
+	const [comments, setComments] = useState([]);
 
 	const location = useLocation();
 	const slug = location.pathname.substring(6);
@@ -43,21 +44,40 @@ const Post = (props) => {
 			try {
 				const q = query(collection(db, "post"));
 				const doc = await getDocs(q);
-				console.log("getting docs now");
 				setBlog(doc.docs[slug]);
 				setLikes(doc.docs[slug].data().likes);
 				setTitle(doc.docs[slug].data().title);
 				setBody(doc.docs[slug].data().body);
 				setCreated(doc.docs[slug].data().created_on);
 				setUserName(doc.docs[slug].data().username);
-				console.log(doc.docs[slug]);
-				console.log("getting data from docs");
 			} catch (err) {
 				console.error(err);
 			}
 		};
 
+		const getComments = async () => {
+			const commentList = blog.data().comment;
+			const num = commentList.length;
+			const list = [];
+			for (let i = 0; i < num; i++) {
+				const id = commentList[i].id;
+				const docRef = doc(db, "comment", `${id}`);
+				const docSnap = await getDoc(docRef);
+				const data = docSnap.data();
+
+				const body = {
+					text: data.body,
+					date: data.created_on,
+					username: data.username,
+				};
+
+				list.push(body);
+			}
+			setComments(list);
+		};
+
 		getPosts();
+		getComments();
 	}, []);
 
 	const makeComment = async () => {
@@ -70,7 +90,6 @@ const Post = (props) => {
 			// add comment to database
 			let created_on = new Date().toJSON().slice(0, 10);
 			let cUserName = await fetchUserName(user);
-			setCommentUserName(cUserName);
 			setCreated(createBlog);
 			const newComment = doc(collection(db, "comment"));
 			const data = {
@@ -137,10 +156,23 @@ const Post = (props) => {
 					{" " + likes}
 				</button>
 				<div>Comments:</div>
+				<div>
+					{comments.map((comment) => {
+						return (
+							<div key={comment.id}>
+								<p1>{"name: " + comment.username + " "}</p1>
+								<p1>{"body: " + comment.text + " "}</p1>
+								<p1>{"date: " + comment.date + " "}</p1>
+
+								<hr />
+							</div>
+						);
+					})}
+				</div>
 			</div>
 			<MDBCard className="bg-white my-2">
 				<MDBCardBody className="p-5 w-100 flex-column">
-					<h2 className=" mb-5">Comment</h2>
+					<h2 className=" mb-5">Make a Comment</h2>
 
 					<MDBValidation className="row g-3" id="form">
 						<MDBTextArea

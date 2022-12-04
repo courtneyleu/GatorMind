@@ -1,15 +1,10 @@
 import React, {useState, useEffect} from "react";
 import {Link, useLocation} from "react-router-dom";
-import axios from "axios";
 import {auth, db} from "../services/firebase";
 import {
 	MDBBtn,
 	MDBCard,
 	MDBCardBody,
-	MDBCol,
-	MDBContainer,
-	MDBInput,
-	MDBRow,
 	MDBTextArea,
 	MDBValidation,
 } from "mdb-react-ui-kit";
@@ -18,14 +13,14 @@ import {
 	doc,
 	collection,
 	query,
-	where,
 	increment,
 	updateDoc,
 	getDocs,
 	arrayUnion,
-	getDoc,
 } from "firebase/firestore";
+import {Heart} from "react-bootstrap-icons";
 import {useAuthState} from "react-firebase-hooks/auth";
+import {fetchUserName} from "./Account";
 
 const Post = (props) => {
 	const [blog, setBlog] = useState({});
@@ -36,8 +31,8 @@ const Post = (props) => {
 	const [liked, setLiked] = useState(false);
 	const [createdOn, setCreated] = useState();
 	const [user, loading, error] = useAuthState(auth);
-	const[fname, setFirst] = useState("");
-	const [lname, setLast] = useState("");
+	const [userName, setUserName] = useState();
+	const [commentUserName, setCommentUserName] = useState();
 
 	const location = useLocation();
 	const slug = location.pathname.substring(6);
@@ -54,8 +49,7 @@ const Post = (props) => {
 				setTitle(doc.docs[slug].data().title);
 				setBody(doc.docs[slug].data().body);
 				setCreated(doc.docs[slug].data().created_on);
-				setFirst(doc.docs[slug].data().first);
-				setLast(doc.docs[slug].data().last);
+				setUserName(doc.docs[slug].data().username);
 				console.log(doc.docs[slug]);
 				console.log("getting data from docs");
 			} catch (err) {
@@ -75,12 +69,14 @@ const Post = (props) => {
 		} else {
 			// add comment to database
 			let created_on = new Date().toJSON().slice(0, 10);
+			let cUserName = await fetchUserName(user);
+			setCommentUserName(cUserName);
 			setCreated(createBlog);
 			const newComment = doc(collection(db, "comment"));
 			const data = {
-				uid: uid,
 				body: commentBody,
 				created_on: created_on,
+				username: cUserName,
 			};
 			await setDoc(newComment, data);
 
@@ -125,7 +121,7 @@ const Post = (props) => {
 		<div className="container mt-3">
 			<h1 className="display-2">{title}</h1>
 			<h2 className="text-muted mt-3">Category:</h2>
-			<h3>Author: {fname + " " + lname}</h3>
+			<h3>{"Author: " + userName}</h3>
 			<h4>{createdOn}</h4>
 			<div className="mt-5 mb-5" dangerouslySetInnerHTML={createBlog()} />
 			<div
@@ -136,14 +132,9 @@ const Post = (props) => {
 					fontWeight: "bold",
 				}}
 			>
-				<button id="btn" onClick = {postLiked}>
-					{" "}
-					<img
-						src="https://cdn.pixabay.com/photo/2021/10/11/00/58/star-6699070_960_720.png"
-						width="25"
-						height="25"
-					/>
-					Likes: {likes}
+				<button onClick={postLiked}>
+					<Heart />
+					{" " + likes}
 				</button>
 				<div>Comments:</div>
 			</div>

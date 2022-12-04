@@ -33,52 +33,56 @@ const Post = (props) => {
 	const [createdOn, setCreated] = useState();
 	const [user, loading, error] = useAuthState(auth);
 	const [userName, setUserName] = useState();
+	const [commentData, setCommentData] = useState();
 	const [comments, setComments] = useState([]);
 
 	const location = useLocation();
 	const slug = location.pathname.substring(6);
 	const uid = user.uid;
 
+	const getPosts = async () => {
+		try {
+			const q = query(collection(db, "post"));
+			const doc = await getDocs(q);
+			setBlog(doc.docs[slug]);
+			setLikes(doc.docs[slug].data().likes);
+			setTitle(doc.docs[slug].data().title);
+			setBody(doc.docs[slug].data().body);
+			setCreated(doc.docs[slug].data().created_on);
+			setUserName(doc.docs[slug].data().username);
+			setCommentData(doc.docs[slug].data().comment);
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const getComments = async () => {
+		console.log(commentData);
+		await getPosts();
+		console.log(commentData);
+		const num = commentData.length;
+		const list = [];
+		for (let i = 0; i < num; i++) {
+			const id = commentData[i].id;
+			const docRef = doc(db, "comment", `${id}`);
+			const docSnap = await getDoc(docRef);
+			const data = docSnap.data();
+
+			const body = {
+				text: data.body,
+				date: data.created_on,
+				username: data.username,
+			};
+
+			list.push(body);
+		}
+		setComments(list);
+	};
+
 	useEffect(() => {
-		const getPosts = async (user) => {
-			try {
-				const q = query(collection(db, "post"));
-				const doc = await getDocs(q);
-				setBlog(doc.docs[slug]);
-				setLikes(doc.docs[slug].data().likes);
-				setTitle(doc.docs[slug].data().title);
-				setBody(doc.docs[slug].data().body);
-				setCreated(doc.docs[slug].data().created_on);
-				setUserName(doc.docs[slug].data().username);
-			} catch (err) {
-				console.error(err);
-			}
-		};
-
-		const getComments = async () => {
-			const commentList = blog.data().comment;
-			const num = commentList.length;
-			const list = [];
-			for (let i = 0; i < num; i++) {
-				const id = commentList[i].id;
-				const docRef = doc(db, "comment", `${id}`);
-				const docSnap = await getDoc(docRef);
-				const data = docSnap.data();
-
-				const body = {
-					text: data.body,
-					date: data.created_on,
-					username: data.username,
-				};
-
-				list.push(body);
-			}
-			setComments(list);
-		};
-
 		getPosts();
 		getComments();
-	}, []);
+	}, [getPosts, getComments]);
 
 	const makeComment = async () => {
 		if (!commentBody) {
@@ -96,6 +100,7 @@ const Post = (props) => {
 				body: commentBody,
 				created_on: created_on,
 				username: cUserName,
+				uid: uid,
 			};
 			await setDoc(newComment, data);
 
@@ -155,20 +160,20 @@ const Post = (props) => {
 					<Heart />
 					{" " + likes}
 				</button>
-				<div>Comments:</div>
-				<div>
-					{comments.map((comment) => {
-						return (
-							<div key={comment.id}>
-								<p1>{"name: " + comment.username + " "}</p1>
-								<p1>{"body: " + comment.text + " "}</p1>
-								<p1>{"date: " + comment.date + " "}</p1>
+			</div>
+			<h3>Comments:</h3>
+			<div>
+				{comments.map((comment) => {
+					return (
+						<div key={comment.id}>
+							<p1>{"name: " + comment.username + " "}</p1>
+							<p1>{"body: " + comment.text + " "}</p1>
+							<p1>{"date: " + comment.date + " "}</p1>
 
-								<hr />
-							</div>
-						);
-					})}
-				</div>
+							<hr />
+						</div>
+					);
+				})}
 			</div>
 			<MDBCard className="bg-white my-2">
 				<MDBCardBody className="p-5 w-100 flex-column">

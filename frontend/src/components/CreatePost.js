@@ -27,8 +27,10 @@ import {
 } from "firebase/firestore";
 
 const options = [
-	{value: "a", label: "a"},
-	{value: "b", label: "b"},
+    { value: 'Studying Tips', label: 'Studying Tips' },
+    { value: 'College Life Hacks', label: 'College Life Hacks' },
+    { value: 'Safety Alerts', label: 'Safety Alert' },
+    { value: 'Event Announcements', label: 'Event Announcement' },
 ];
 
 function CreatePost() {

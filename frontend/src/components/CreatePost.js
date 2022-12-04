@@ -27,12 +27,12 @@ import {
 } from "firebase/firestore";
 
 const options = [
-    { value: 'Studying Tips', label: 'Studying Tips' },
-    { value: 'College Life Hacks', label: 'College Life Hacks' },
-    { value: 'Safety Alerts', label: 'Safety Alert' },
-    { value: 'Event Announcements', label: 'Event Announcement' },
-	{ value: 'Food Recommendations', label: 'Food Recommendations' },
-	{ value: 'Budgeting Tips', label: 'Budgeting Tips' },
+	{value: "Studying Tips", label: "Studying Tips"},
+	{value: "College Life Hacks", label: "College Life Hacks"},
+	{value: "Safety Alerts", label: "Safety Alert"},
+	{value: "Event Announcements", label: "Event Announcement"},
+	{value: "Food Recommendations", label: "Food Recommendations"},
+	{value: "Budgeting Tips", label: "Budgeting Tips"},
 ];
 
 function CreatePost() {
@@ -47,13 +47,16 @@ function CreatePost() {
 	const navigate = useNavigate();
 
 	const makePost = async () => {
-		if (!title || !body) {
+		if (!title || !body || !category) {
 			document.getElementById("form").reset();
 			if (!title) {
 				setTitle("");
 			}
 			if (!body) {
 				setBody("");
+			}
+			if (!category) {
+				setCategory("");
 			}
 		} else {
 			// add post to database
@@ -110,7 +113,7 @@ function CreatePost() {
 				<MDBCol>
 					<MDBCard
 						className="bg-white my-5 mx-auto"
-						style={{borderRadius: "1rem", maxWidth: "500px"}}
+						style={{borderRadius: "1rem"}}
 					>
 						<MDBCardBody className="p-5 w-100 d-flex flex-column">
 							<h2 className="fw-bold mb-5 text-center">Make Post</h2>
@@ -132,6 +135,7 @@ function CreatePost() {
 										<Select
 											isMulti
 											name="categories"
+											required
 											options={options}
 											closeMenuOnSelect={false}
 											className="basic-multi-select"

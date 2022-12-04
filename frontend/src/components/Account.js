@@ -152,10 +152,12 @@ const getUserComments = async (user) => {
 		for (let i = 0; i < posts.length; i++) {
 			const postDoc = await getDoc(posts[i]);
 			const postData = postDoc.data();
-			if (postData.comments == null) {
+			console.log(postData);
+			if (postData.comment == null) {
 				continue;
+			} else {
+				comments += postData.comment.length;
 			}
-			comments += postData.comments.length;
 		}
 		return comments;
 	} catch (err) {

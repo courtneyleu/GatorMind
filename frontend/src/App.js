@@ -15,15 +15,18 @@ import {
 	HouseDoor,
 } from "react-bootstrap-icons";
 import {useAuthState} from "react-firebase-hooks/auth";
-import {auth, logout} from "./services/firebase";
+import {auth, Logout} from "./services/firebase";
 import {MDBIcon} from "mdb-react-ui-kit";
 import PostList from "./components/PostList";
 import Post from "./components/Post";
+import {signOut} from "firebase/auth";
+
 function App() {
 	const [user, loading, error] = useAuthState(auth);
 	const [search, SetSearch] = useState("");
 	const [blogs, setBlogs] = useState([]);
 	const navigate = useNavigate();
+
 	console.log(useAuthState(auth));
 
 	const SearchBlog = (e) => {
@@ -37,6 +40,11 @@ function App() {
 		);
 	};
 
+	const logout = () => {
+		signOut(auth);
+		console.log(auth);
+	};
+
 	useEffect(() => {
 		if (loading) {
 			return;
@@ -44,7 +52,7 @@ function App() {
 		if (user) {
 			navigate("/home");
 		} else if (user == null) {
-			navigate("/login");
+			return;
 		}
 	}, [user, loading]);
 
@@ -94,7 +102,7 @@ function App() {
 						</li>
 						<li className="nav-item">
 							<button type="button" className="btn btn-dark" onClick={logout}>
-								<Link className="nav-link" to="/login">
+								<Link className="nav-link" to="/">
 									<BackspaceReverse />
 								</Link>
 							</button>

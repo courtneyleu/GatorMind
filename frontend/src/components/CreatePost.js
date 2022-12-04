@@ -39,9 +39,9 @@ function CreatePost() {
 	const [category, setCategory] = useState();
 	const [username, setUsername] = useState();
 	const [dataIsSet, setData] = useState(false);
+	const [uid, setUID] = useState();
 	const navigate = useNavigate();
 
-	const uid = user.uid; // use to link the post to user
 	const makePost = async () => {
 		if (!title || !body) {
 			document.getElementById("form").reset();
@@ -92,6 +92,8 @@ function CreatePost() {
 	}, [user, loading]);
 
 	const getData = async () => {
+		const uid = user.uid;
+		setUID(uid);
 		const today = new Date().toISOString().slice(0, 10);
 		const userName = await fetchUserName(user);
 		setDate(today);

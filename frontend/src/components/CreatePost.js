@@ -31,6 +31,8 @@ const options = [
     { value: 'College Life Hacks', label: 'College Life Hacks' },
     { value: 'Safety Alerts', label: 'Safety Alert' },
     { value: 'Event Announcements', label: 'Event Announcement' },
+	{ value: 'Food Recommendations', label: 'Food Recommendations' },
+	{ value: 'Budgeting Tips', label: 'Budgeting Tips' },
 ];
 
 function CreatePost() {

@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 import {collection, query, getDocs} from "firebase/firestore";
 import {db} from "../services/firebase";
 import {Heart} from "react-bootstrap-icons";
+import "../styles/style.css"
+
 const PostList = () => {
 	const [blogs, setBlogs] = useState([]);
 	const [featuredBlog, setFeaturedBlog] = useState([]);
@@ -72,11 +74,11 @@ const PostList = () => {
 
 			return list.push(
 				<div
-					className="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+					className="row1 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
 					style={{width: 1200}}
 				>
 					<div className="col p-4 d-flex flex-column position-static">
-						<h3 className="mb-0">{blogPost.data().title}</h3>
+						<h4 className="mb-0">{blogPost.data().title}</h4>
 						<div className="mb-1 text-muted">
 							Created On: {blogPost.data().created_on}
 						</div>
@@ -123,57 +125,25 @@ const PostList = () => {
 		<div className="container mt-3">
 			<div className="nav-scroller py-1 mb-2">
 				<nav className="nav d-flex justify-content-between">
-					<Link className="p-2 text-muted" to="/category/world">
-						World
+					<Link className="p-2 text-black" to="/category/Studying Tips">
+						Studying Tips
 					</Link>
-					<Link className="p-2 text-muted" to="/category/environment">
-						Environment
+					<Link className="p-2 text-black" to="/category/College Life Hacks">
+						College Life Hacks
 					</Link>
-					<Link className="p-2 text-muted" to="/category/technology">
-						Technology
+					<Link className="p-2 text-black" to="/category/Safety Alerts">
+						Safety Alerts
 					</Link>
-					<Link className="p-2 text-muted" to="/category/design">
-						Design
+					<Link className="p-2 text-black" to="/category/Event Announcements">
+						Event Announcements
 					</Link>
-					<Link className="p-2 text-muted" to="/category/culture">
-						Culture
+					<Link className="p-2 text-black" to="/category/Food Recommendations">
+						Food Recommendations
 					</Link>
-					<Link className="p-2 text-muted" to="/category/business">
-						Business
-					</Link>
-					<Link className="p-2 text-muted" to="/category/politics">
-						Politics
-					</Link>
-					<Link className="p-2 text-muted" to="/category/opinion">
-						Opinion
-					</Link>
-					<Link className="p-2 text-muted" to="/category/science">
-						Science
-					</Link>
-					<Link className="p-2 text-muted" to="/category/health">
-						Health
-					</Link>
-					<Link className="p-2 text-muted" to="/category/style">
-						Style
-					</Link>
-					<Link className="p-2 text-muted" to="/category/travel">
-						Travel
+					<Link className="p-2 text-black" to="/category/Budgeting Tips">
+						Budgeting Tips
 					</Link>
 				</nav>
-			</div>
-
-			<div className="jumbotron p-4 p-md-5 text-white rounded bg-dark">
-				<div className="col-md-6 px-0">
-					<h1 className="display-4 font-italic">{featuredBlog.title}</h1>
-					<p className="lead mb-0">
-						<Link
-							to={`/post/${featuredBlog.slug}`}
-							className="text-white font-weight-bold"
-						>
-							Continue reading...
-						</Link>
-					</p>
-				</div>
 			</div>
 
 			{getBlogs()}

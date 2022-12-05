@@ -3,7 +3,19 @@ import {Link} from "react-router-dom";
 import {collection, query, getDocs} from "firebase/firestore";
 import {db} from "../services/firebase";
 import {Heart} from "react-bootstrap-icons";
-import "../styles/style.css"
+import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import "../styles/style.css";
+import {
+	MDBBtn,
+	MDBCard,
+	MDBCardBody,
+	MDBTextArea,
+	MDBValidation,
+	MDBContainer,
+} from "mdb-react-ui-kit";
 
 const PostList = () => {
 	const [blogs, setBlogs] = useState([]);
@@ -25,40 +37,6 @@ const PostList = () => {
 		getPosts();
 	}, []);
 
-	/*	const postLiked = async (props) => {
-		setLiked(!liked);
-		console.log(liked);
-		const btn = document.getElementById("btn");
-		if (!liked) {
-			setLikes((likes) => likes + 1);
-			btn.style.backgroundColor = "blue";
-      console.log(props);
-       console.log(doc.docs[props]);
-          const thepost = doc(db, "post", `${doc.docs[props].id}`);
-          
-
-// Atomically increment the population of the city by 50.
-     await updateDoc(thepost, {
-            likes: increment(1)
-                });
-		
-        } 
-    else {
-			setLikes((likes) => likes - 1);
-			btn.style.backgroundColor = "lightgray";
-            
-            const thepost = doc(db, "post", `${doc.docs[props].id}`);
-
-            // Atomically increment the population of the city by 50.
-                 await updateDoc(thepost, {
-                        likes: increment(-1)
-                            });
-
-
-		}
-
-    };
-*/
 	const getBlogs = () => {
 		let list = [];
 		let result = [];
@@ -66,47 +44,61 @@ const PostList = () => {
 
 		blogs?.map((blogPost) => {
 			i++;
-			if (blogPost.data().comments !== "undefined") {
-				console.log("no comments found");
-			} else {
-				console.log(blogPost.comments.length);
-			}
-
 			return list.push(
-				<div
-					className="row1 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
-					style={{width: 1200}}
-				>
-					<div className="col p-4 d-flex flex-column position-static">
-						<h4 className="mb-0">{blogPost.data().title}</h4>
-						<div className="mb-1 text-muted">
-							Created On: {blogPost.data().created_on}
-						</div>
-						<div>Author: {blogPost.data().username}</div>
-						<div className="card-text mb-auto" style={{fontSize: 18}}>
-							{blogPost.data().body}
-						</div>
-						<div
-							style={{
-								display: "flex",
-								columnGap: 60,
-								alignItems: "center",
-								fontSize: 18,
-								fontWeight: "bold",
-							}}
-						>
-							<div>
-								<button>
-									<Heart />
-								</button>{" "}
-								{blogPost.data().likes}
+				<MDBContainer fluid>
+					<div
+						className="row1 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-center"
+						style={{width: 830}}
+					>
+						<MDBCardBody className="p-5 flex-column" width="1000px">
+							<div className="mb-1 text-muted">
+								{blogPost.data().created_on}
 							</div>
-							<div>Comments:</div>
-						</div>
+							<div className="mb-1 text-muted">{blogPost.data().username}</div>
+							<h4>{blogPost.data().title}</h4>
+							<Container>
+								<Row>
+									{blogPost.data().category.map((category) => {
+										return (
+											<Col md="auto">
+												<MDBBtn color="light" rippleColor="dark">
+													{category.value}
+												</MDBBtn>
+											</Col>
+										);
+									})}
+								</Row>
+							</Container>
+							<p></p>
+							<div
+								style={{
+									display: "flex",
+									columnGap: 60,
+									alignItems: "center",
+									fontSize: "medium",
+								}}
+							>
+								<div>
+									<p
+										type="button"
+										style={{
+											color: "#00005c",
+											backgroundColor: "#FFFFFF",
+											borderColor: "#FFFFFF",
+											boxShadow: "none",
+										}}
+									>
+										<Heart />
+										{" " + blogPost.data().likes}
+									</p>
+								</div>
+								<p>{"Comments: " + blogPost.data().commentNum}</p>
+							</div>
 
-						<Link to={`/post/${i}`}>Continue reading</Link>
+							<Link to={`/post/${i}`}>Continue reading</Link>
+						</MDBCardBody>
 					</div>
-				</div>
+				</MDBContainer>
 			);
 		});
 		/*className="stretched-link"*/
@@ -121,34 +113,7 @@ const PostList = () => {
 		return result;
 	};
 
-	return (
-		<div className="container mt-3">
-			<div className="nav-scroller py-1 mb-2">
-				<nav className="nav d-flex justify-content-between">
-					<Link className="p-2 text-black" to="/category/Studying Tips">
-						Studying Tips
-					</Link>
-					<Link className="p-2 text-black" to="/category/College Life Hacks">
-						College Life Hacks
-					</Link>
-					<Link className="p-2 text-black" to="/category/Safety Alerts">
-						Safety Alerts
-					</Link>
-					<Link className="p-2 text-black" to="/category/Event Announcements">
-						Event Announcements
-					</Link>
-					<Link className="p-2 text-black" to="/category/Food Recommendations">
-						Food Recommendations
-					</Link>
-					<Link className="p-2 text-black" to="/category/Budgeting Tips">
-						Budgeting Tips
-					</Link>
-				</nav>
-			</div>
-
-			{getBlogs()}
-		</div>
-	);
+	return <div className="container mt-3">{getBlogs()}</div>;
 };
 
 export default PostList;

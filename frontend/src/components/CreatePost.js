@@ -72,6 +72,7 @@ function CreatePost() {
 				likes: 0,
 				username: username,
 				comment: null,
+				commentNum: 0,
 			};
 			await setDoc(newPost, data);
 
@@ -113,7 +114,7 @@ function CreatePost() {
 				<MDBCol>
 					<MDBCard
 						className="bg-white my-5 mx-auto"
-						style={{borderRadius: "1rem"}}
+						style={{borderRadius: "1rem", maxWidth: "1000px"}}
 					>
 						<MDBCardBody className="p-5 w-100 d-flex flex-column">
 							<h2 className="fw-bold mb-5 text-center">Make Post</h2>

@@ -15,6 +15,8 @@ import {
 	MDBTextArea,
 	MDBValidation,
 	MDBContainer,
+	MDBCardTitle,
+	MDBCardSubTitle,
 } from "mdb-react-ui-kit";
 
 const PostList = () => {
@@ -45,60 +47,60 @@ const PostList = () => {
 		blogs?.map((blogPost) => {
 			i++;
 			return list.push(
-				<MDBContainer fluid>
-					<div
-						className="row1 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-center"
-						style={{width: 830}}
-					>
-						<MDBCardBody className="p-5 flex-column" width="1000px">
-							<div className="mb-1 text-muted">
-								{blogPost.data().created_on}
+				<div
+					className="row1 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
+					style={{width: 1200}}
+				>
+					<MDBCardBody className="p-5 flex-column" width="1000px">
+						<MDBCardSubTitle className="mb-1 text-muted">
+							{blogPost.data().created_on}
+						</MDBCardSubTitle>
+						<MDBCardSubTitle className="mb-1 text-muted">
+							{blogPost.data().username}
+						</MDBCardSubTitle>
+						<MDBCardTitle>{blogPost.data().title}</MDBCardTitle>
+						<Container>
+							<Row>
+								{blogPost.data().category.map((category) => {
+									return (
+										<Col md="auto">
+											<MDBBtn color="light" rippleColor="dark">
+												{category.value}
+											</MDBBtn>
+										</Col>
+									);
+								})}
+							</Row>
+						</Container>
+						<p></p>
+						<div
+							style={{
+								display: "flex",
+								columnGap: 60,
+								alignItems: "center",
+								fontSize: "medium",
+							}}
+						>
+							<div>
+								<p
+									type="button"
+									style={{
+										color: "#00005c",
+										backgroundColor: "#FFFFFF",
+										borderColor: "#FFFFFF",
+										boxShadow: "none",
+									}}
+								>
+									<Heart />
+									{" " + blogPost.data().likes}
+								</p>
 							</div>
-							<div className="mb-1 text-muted">{blogPost.data().username}</div>
-							<h4>{blogPost.data().title}</h4>
-							<Container>
-								<Row>
-									{blogPost.data().category.map((category) => {
-										return (
-											<Col md="auto">
-												<MDBBtn color="light" rippleColor="dark">
-													{category.value}
-												</MDBBtn>
-											</Col>
-										);
-									})}
-								</Row>
-							</Container>
-							<p></p>
-							<div
-								style={{
-									display: "flex",
-									columnGap: 60,
-									alignItems: "center",
-									fontSize: "medium",
-								}}
-							>
-								<div>
-									<p
-										type="button"
-										style={{
-											color: "#00005c",
-											backgroundColor: "#FFFFFF",
-											borderColor: "#FFFFFF",
-											boxShadow: "none",
-										}}
-									>
-										<Heart />
-										{" " + blogPost.data().likes}
-									</p>
-								</div>
-								<p>{"Comments: " + blogPost.data().commentNum}</p>
-							</div>
+							<p>{"Comments: " + blogPost.data().commentNum}</p>
+						</div>
 
-							<Link to={`/post/${i}`}>Continue reading</Link>
-						</MDBCardBody>
-					</div>
-				</MDBContainer>
+						<Link to={`/post/${i}`}>Continue reading</Link>
+					</MDBCardBody>
+				</div>
 			);
 		});
 		/*className="stretched-link"*/

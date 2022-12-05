@@ -108,6 +108,10 @@ function CreatePost() {
 		setUsername(userName);
 	};
 
+	const resetForm = () => {
+		document.getElementById("form").reset();
+	};
+
 	return (
 		<MDBContainer fluid>
 			<MDBRow>

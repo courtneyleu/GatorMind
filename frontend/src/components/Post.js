@@ -7,6 +7,7 @@ import {
 	MDBCardBody,
 	MDBTextArea,
 	MDBValidation,
+	MDBIcon,
 } from "mdb-react-ui-kit";
 import {
 	setDoc,
@@ -18,7 +19,6 @@ import {
 	getDocs,
 	arrayUnion,
 	getDoc,
-	snapshotEqual,
 } from "firebase/firestore";
 import {Heart, HeartFill} from "react-bootstrap-icons";
 import {useAuthState} from "react-firebase-hooks/auth";
@@ -29,7 +29,6 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import {NonceProvider} from "react-select";
 
 const Post = (props) => {
 	const [blog, setBlog] = useState({});
@@ -49,7 +48,13 @@ const Post = (props) => {
 
 	const location = useLocation();
 	const slug = location.pathname.substring(6);
-	// todo: refresh button
+
+	useEffect(() => {
+		setUID(user.uid);
+		getPosts();
+		getComments();
+	}, [user.uid]);
+
 	const getPosts = async () => {
 		try {
 			const q = query(collection(db, "post"));
@@ -63,7 +68,6 @@ const Post = (props) => {
 			setCommentData(doc.docs[slug].data().comment);
 			setCategory(doc.docs[slug].data().category);
 			setCommentNum(doc.docs[slug].data().commentNum);
-			console.log(commentNum);
 		} catch (err) {
 			console.error(err);
 		}
@@ -87,14 +91,12 @@ const Post = (props) => {
 		}
 		setComments(list);
 	};
+	const refreshPage = () => {
+		window.location.reload(false);
+	};
 
-	useEffect(() => {
-		setUID(user.uid);
-		getPosts();
-		getComments();
-	}, [user.uid]);
-
-	const makeComment = async () => {
+	const makeComment = async (event) => {
+		event.preventDefault();
 		if (!commentBody) {
 			document.getElementById("form").reset();
 			if (!commentBody) {
@@ -249,15 +251,20 @@ const Post = (props) => {
 					{comments.map((comment) => {
 						return (
 							<div key={comment.id}>
-								<p1>{"name: " + comment.username + " "}</p1>
-								<p1>{"body: " + comment.text + " "}</p1>
-								<p1>{"date: " + comment.date + " "}</p1>
-
-								<hr />
+								<MDBCard>
+									<MDBCardBody>
+										<p1>{"name: " + comment.username + " "}</p1>
+										<p1>{"body: " + comment.text + " "}</p1>
+										<p1>{"date: " + comment.date + " "}</p1>
+									</MDBCardBody>
+								</MDBCard>
 							</div>
 						);
 					})}
 				</div>
+				<button class="refreshBtn" tag="a" onClick={refreshPage} size="lg">
+					<MDBIcon fas icon="sync" />
+				</button>
 				<p className="lead mb-5">
 					<Link to="/home" className="font-weight-bold">
 						Back to Posts

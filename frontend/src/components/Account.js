@@ -152,7 +152,6 @@ const getUserComments = async (user) => {
 		for (let i = 0; i < posts.length; i++) {
 			const postDoc = await getDoc(posts[i]);
 			const postData = postDoc.data();
-			console.log(postData);
 			if (postData.comment == null) {
 				continue;
 			} else {

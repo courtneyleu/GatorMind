@@ -10,20 +10,17 @@ import Button from "react-bootstrap/Button";
 import "../styles/style.css";
 import {
 	MDBBtn,
-	MDBCard,
 	MDBCardBody,
-	MDBTextArea,
-	MDBValidation,
-	MDBContainer,
+	MDBIcon,
 	MDBCardTitle,
 	MDBCardSubTitle,
 } from "mdb-react-ui-kit";
+import "./PostList.css";
 
 const PostList = () => {
 	const [blogs, setBlogs] = useState([]);
 	const [featuredBlog, setFeaturedBlog] = useState([]);
-	//const [liked, setLiked] = useState(false);
-	//	const [likes, setLikes] = useState();
+
 	useEffect(() => {
 		const getPosts = async (user) => {
 			try {
@@ -38,6 +35,9 @@ const PostList = () => {
 
 		getPosts();
 	}, []);
+	const refreshPage = () => {
+		window.location.reload(false);
+	};
 
 	const getBlogs = () => {
 		let list = [];
@@ -115,7 +115,16 @@ const PostList = () => {
 		return result;
 	};
 
-	return <div className="container mt-3">{getBlogs()}</div>;
+	return (
+		<div>
+			<div className="container mt-3">{getBlogs()}</div>
+			<div>
+				<button class="refreshBtn" tag="a" onClick={refreshPage} size="lg">
+					<MDBIcon fas icon="sync" />
+				</button>
+			</div>
+		</div>
+	);
 };
 
 export default PostList;

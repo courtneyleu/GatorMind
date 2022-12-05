@@ -1,0 +1,14 @@
+.refreshBtn {
+	background-color: #196ad3;
+	border: none;
+	color: white;
+	padding: 20px;
+	text-align: center;
+	display: inline-block;
+	font-size: 16px;
+	border-radius: 50%;
+	position: fixed;
+	bottom: 10px;
+	box-shadow: 1px 1px 1px grey;
+	right: 10px;
+}

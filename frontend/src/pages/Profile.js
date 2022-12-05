@@ -1,93 +1,133 @@
-import {Col, Container, Row, Image} from "react-bootstrap";
-import {CircleFill, Gear} from "react-bootstrap-icons";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Col, Row} from "react-bootstrap";
+import {CircleFill, Gear, Heart} from "react-bootstrap-icons";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import {
 	fetchUserName,
 	getFollowers,
-	fetchFirstName,
-	fetchLastName,
 	getFollowing,
-	getEmail,
+	getPosts,
 	getPostsLength,
 	getUserLikes,
 	getUserComments,
 } from "../components/Account";
-import {auth, db, logout} from "../services/firebase";
+import {auth} from "../services/firebase";
 import {useAuthState} from "react-firebase-hooks/auth";
+import CreatePost from "../components/CreatePost";
+import {getDoc} from "firebase/firestore";
+import {MDBBtn, MDBCard, MDBCardBody, MDBCardSubTitle, MDBCardTitle} from "mdb-react-ui-kit";
+import Container from "react-bootstrap/Container";
 const Profile = () => {
-	const [user, loading, error] = useAuthState(auth);
+	const [user, loading] = useAuthState(auth);
 	const [name, setName] = useState("");
 	const [followers, setFollowers] = useState(0);
 	const [following, setFollowing] = useState(0);
 	const [totalPosts, setTotalPosts] = useState(0);
+	const [postData, setPostData] = useState([]);
 	const [likes, setLikes] = useState(0);
 	const [numComments, setComments] = useState(0);
+	const [postList, setPostList] = useState([]);
 	const navigate = useNavigate();
 
-	let promiseName = fetchUserName(user);
-	promiseName.then(
-		function (value) {
-			setName(value);
-		},
-		function (error) {
-			setName("error");
-		}
-	);
-	let promiseFollowing = getFollowers(user);
-	promiseFollowing.then(
-		function (value) {
-			setFollowers(value);
-		},
-		function (error) {
-			setName("error");
-		}
-	);
-
-	let promiseTotalPosts = getPostsLength(user);
-	promiseTotalPosts.then(
-		function (value) {
-			setTotalPosts(value);
-		},
-		function (error) {
-			setName("error");
-		}
-	);
-
-	let promiseFollowers = getFollowing(user);
-	promiseFollowers.then(
-		function (value) {
-			setFollowing(value);
-		},
-		function (error) {
-			setName("error");
-		}
-	);
-
-	let promiseLikes = getUserLikes(user);
-	promiseLikes.then(
-		function (value) {
-			setLikes(value);
-		},
-		function (error) {
-			setLikes("error");
-		}
-	);
-
-	let promiseComments = getUserComments(user);
-	promiseComments.then(
-		function (value) {
-			setComments(value);
-		},
-		function (error) {
-			setComments("error");
-		}
-	);
 
 	useEffect(() => {
+		let promiseName = fetchUserName(user);
+		promiseName.then(
+			function (value) {
+				setName(value);
+			},
+			function (error) {
+				setName("error");
+			}
+		);
+		let promiseFollowing = getFollowers(user);
+		promiseFollowing.then(
+			function (value) {
+				setFollowers(value);
+			},
+			function (error) {
+				setName("error");
+			}
+		);
+
+		let promiseTotalPosts = getPostsLength(user);
+		promiseTotalPosts.then(
+			function (value) {
+				setTotalPosts(value);
+			},
+			function (error) {
+				setName("error");
+			}
+		);
+
+		let promiseFollowers = getFollowing(user);
+		promiseFollowers.then(
+			function (value) {
+				setFollowing(value);
+			},
+			function (error) {
+				setName("error");
+			}
+		);
+
+		let promiseLikes = getUserLikes(user);
+		promiseLikes.then(
+			function (value) {
+				setLikes(value);
+			},
+			function (error) {
+				setLikes("error");
+			}
+		);
+
+		let promiseComments = getUserComments(user);
+		promiseComments.then(
+			function (value) {
+				setComments(value);
+			},
+			function (error) {
+				setComments("error");
+			}
+		);
+
+		let promisePosts = getPosts(user);
+		promisePosts.then(
+			function (value) {
+				setPostData(value);
+			},
+			function (error) {
+				setComments("error");
+			}
+		);
+		posts();
 		if (loading) return;
 		if (!user) return navigate("/");
 	}, [user, loading]);
+
+	const posts = async () =>{
+		const list = [];
+		for(let i = 0; i < postData.length;  i++){
+			const doc = await getDoc(postData[i]);
+			const docData = doc.data();
+			const data = {
+				body: docData.body,
+				category : docData.category,
+				comment : docData.comment,
+				commentNum : docData.commentNum,
+				created_on: docData.created_on,
+				likes: docData.likes,
+				title: docData.title,
+				uid: docData.uid,
+				username : docData.username,
+			};
+			list.push(data);
+		}
+		setPostList(list);
+	};
+
+
+	console.log(postList);
+
 	return (
 		<div className="d-grid gap-md-3">
 			<div className="p-3"></div>
@@ -111,7 +151,7 @@ const Profile = () => {
 									<div className="row align-items-center">
 										<div className="col">
 											<button className="btn btn-primary">
-												{"Followers:" + followers}
+												{"Followers: " + followers}
 											</button>
 										</div>
 										<div className="col">
@@ -132,116 +172,67 @@ const Profile = () => {
 						</div>
 					</div>
 					<div className="col">
-						<div className="p-2 bg-light border">
-							<p className="h6">Create Your Own Post...</p>
-							<div className="d-grid gap-md-3">
-								{/* <div className="p-1">
-                                </div> */}
-								<div className="p-2 bg-white border">
-									<Row>
-										<Col>Title:</Col>
-										<Col>Tags:</Col>
-									</Row>
-								</div>
-								<div className="p-2 bg-white border">
-									<p className="h6">What's on your mind?</p>
-									<Row>
-										<Col></Col>
-										<Col></Col>
-										<Col></Col>
-										<Col></Col>
-										<Col></Col>
-										<Col></Col>
-										<Col>
-											<button className="btn btn-primary">Post</button>
-										</Col>
-									</Row>
-								</div>
+					<CreatePost />
 							</div>
-						</div>
-
-						<div className="p-1"></div>
-
-						<div class="btn-group">
-							<a href="#" class="btn btn-dark mr-2">
-								Recent
-							</a>
-							<a href="#" class="btn btn-dark">
-								Following
-							</a>
-						</div>
-
-						<div className="p-1"></div>
-
-						<div class="row">
-							<div className="p-2 bg-light border">
-								<div className="p-2 bg-white border">
-									<left>
-										<CircleFill size={30} />
-									</left>
-									<div className="p-1"></div>
-
-									<div className="p-1 bg-light border">
-										<p className="h8">Tags:</p>
-									</div>
-
-									<Row>
-										<Col>
-											<p className="h8">Comments:</p>
-										</Col>
-										<Col>
-											<p className="h8">Reactions:</p>
-										</Col>
-										<Col></Col>
-										<Col></Col>
-										<Col></Col>
-										<Col></Col>
-										<Col>
-											<div className="p-1"></div>
-											<right>
-												<button className="btn btn-info">Save</button>
-											</right>
-										</Col>
-									</Row>
-								</div>
-
-								<div className="p-2"></div>
-
-								<div className="p-2 bg-white border">
-									<left>
-										<CircleFill size={30} />
-									</left>
-									<div className="p-1"></div>
-
-									<div className="p-1 bg-light border">
-										<p className="h8">Tags:</p>
-									</div>
-
-									<Row>
-										<Col>
-											<p className="h8">Comments:</p>
-										</Col>
-										<Col>
-											<p className="h8">Reactions:</p>
-										</Col>
-										<Col></Col>
-										<Col></Col>
-										<Col></Col>
-										<Col></Col>
-										<Col>
-											<div className="p-1"></div>
-											<right>
-												<button className="btn btn-info">Save</button>
-											</right>
-										</Col>
-									</Row>
-								</div>
-							</div>
+					<div>
+						{postList?.map((data) => {
+							return (
+								<MDBCard
+								>
+									<MDBCardBody className="p-5 flex-column" >
+										<MDBCardSubTitle className="mb-1 text-muted">
+											{data.created_on}
+										</MDBCardSubTitle>
+										<MDBCardSubTitle className="mb-1 text-muted">
+											{data.username}
+										</MDBCardSubTitle>
+										<MDBCardTitle>{data.title}</MDBCardTitle>
+										<Container>
+											<Row>
+												{data.category.map((category) => {
+													return (
+														<Col md="auto">
+															<MDBBtn color="light" rippleColor="dark">
+																{category.value}
+															</MDBBtn>
+														</Col>
+													);
+												})}
+											</Row>
+										</Container>
+										<p></p>
+										<div
+											style={{
+												display: "flex",
+												columnGap: 60,
+												alignItems: "center",
+												fontSize: "medium",
+											}}
+										>
+											<div>
+												<p
+													type="button"
+													style={{
+														color: "#00005c",
+														backgroundColor: "#FFFFFF",
+														borderColor: "#FFFFFF",
+														boxShadow: "none",
+													}}
+												>
+													<Heart />
+													{" " + data.likes}
+												</p>
+											</div>
+											<p>{"Comments: " + data.commentNum}</p>
+										</div>
+									</MDBCardBody>
+								</MDBCard>
+							);
+						})}
+					</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
 	);
 };
 

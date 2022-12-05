@@ -36,13 +36,12 @@ const options = [
 ];
 
 function CreatePost() {
-	const [user, loading, error] = useAuthState(auth);
+	const [user, loading] = useAuthState(auth);
 	const [title, setTitle] = useState("");
 	const [body, setBody] = useState("");
 	const [created_on, setDate] = useState("");
 	const [category, setCategory] = useState();
 	const [username, setUsername] = useState();
-	const [dataIsSet, setData] = useState(false);
 	const [uid, setUID] = useState();
 	const navigate = useNavigate();
 
@@ -94,11 +93,6 @@ function CreatePost() {
 		getData();
 	};
 
-	useEffect(() => {
-		if (loading) return;
-		if (user) navigate("/home");
-	}, [user, loading]);
-
 	const getData = async () => {
 		const uid = user.uid;
 		setUID(uid);
@@ -106,10 +100,6 @@ function CreatePost() {
 		const userName = await fetchUserName(user);
 		setDate(today);
 		setUsername(userName);
-	};
-
-	const resetForm = () => {
-		document.getElementById("form").reset();
 	};
 
 	return (

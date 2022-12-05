@@ -8,7 +8,6 @@ import {
 	MDBCardBody,
 	MDBCol,
 	MDBContainer,
-	MDBIcon,
 	MDBInput,
 	MDBRow,
 	MDBValidation,

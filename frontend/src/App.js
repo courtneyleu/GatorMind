@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {Routes, Route, Link, useNavigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./pages/Login";
@@ -9,20 +9,19 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import {
 	BackspaceReverse,
-	Bell,
 	CircleFill,
 	Gear,
 	HouseDoor,
 } from "react-bootstrap-icons";
 import {useAuthState} from "react-firebase-hooks/auth";
-import {auth, Logout} from "./services/firebase";
+import {auth} from "./services/firebase";
 import {MDBIcon} from "mdb-react-ui-kit";
 import PostList from "./components/PostList";
 import Post from "./components/Post";
 import {signOut} from "firebase/auth";
 
 function App() {
-	const [user, loading, error] = useAuthState(auth);
+	const [user, loading] = useAuthState(auth);
 	const [search, SetSearch] = useState("");
 	const [blogs, setBlogs] = useState([]);
 	const navigate = useNavigate();
@@ -42,7 +41,6 @@ function App() {
 
 	const logout = () => {
 		signOut(auth);
-		console.log(auth);
 	};
 
 	useEffect(() => {
@@ -60,7 +58,7 @@ function App() {
 		<div>
 			{user && (
 				<nav className="navbar navbar-expand navbar-dark bg-dark">
-					<a className="navbar-brand" href="#">
+					<a className="navbar-brand" href="/home">
 						<MDBIcon fas icon="brain" />
 						GatorMind
 					</a>

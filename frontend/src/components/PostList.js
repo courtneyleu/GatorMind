@@ -6,7 +6,6 @@ import {Heart} from "react-bootstrap-icons";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import "../styles/style.css";
 import {
 	MDBBtn,
@@ -19,7 +18,6 @@ import "./PostList.css";
 
 const PostList = () => {
 	const [blogs, setBlogs] = useState([]);
-	const [featuredBlog, setFeaturedBlog] = useState([]);
 
 	useEffect(() => {
 		const getPosts = async (user) => {
@@ -27,7 +25,6 @@ const PostList = () => {
 				const q = query(collection(db, "post"));
 				const doc = await getDocs(q);
 				setBlogs(doc.docs);
-				setFeaturedBlog(doc.docs[0].data());
 			} catch (err) {
 				console.error(err);
 			}

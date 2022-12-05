@@ -38,7 +38,7 @@ const Post = (props) => {
 	const [commentBody, setCommentBody] = useState();
 	const [liked, setLiked] = useState(false);
 	const [createdOn, setCreated] = useState();
-	const [user, loading, error] = useAuthState(auth);
+	const [user] = useAuthState(auth);
 	const [userName, setUserName] = useState();
 	const [commentData, setCommentData] = useState();
 	const [comments, setComments] = useState([]);
@@ -91,6 +91,7 @@ const Post = (props) => {
 		}
 		setComments(list);
 	};
+
 	const refreshPage = () => {
 		window.location.reload(false);
 	};
@@ -171,7 +172,7 @@ const Post = (props) => {
 				<div className="bg-image hover-overlay">
 					<Container>
 						<Row>
-							{category.map((category) => {
+							{category?.map((category) => {
 								return (
 									<Col md="auto">
 										<MDBBtn color="light" rippleColor="dark">

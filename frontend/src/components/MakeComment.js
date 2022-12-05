@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {auth, db} from "../services/firebase";
-import Select from "react-select";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {
 	MDBBtn,
@@ -9,7 +8,6 @@ import {
 	MDBCardBody,
 	MDBCol,
 	MDBContainer,
-	MDBInput,
 	MDBRow,
 	MDBTextArea,
 	MDBValidation,
@@ -18,23 +16,14 @@ import {
 	setDoc,
 	doc,
 	collection,
-	query,
-	where,
 	updateDoc,
-	getDocs,
 	arrayUnion,
 } from "firebase/firestore";
 
-const options = [
-	{value: "a", label: "a"},
-	{value: "b", label: "b"},
-];
-
 function MakeComment(postID) {
-	const [user, loading, error] = useAuthState(auth);
+	const [user, loading, ] = useAuthState(auth);
 	const [body, setBody] = useState("");
 	const [created_on, setDate] = useState("");
-	const navigate = useNavigate();
 
 	const uid = user.uid;
 	const makeComment = async () => {
@@ -64,7 +53,6 @@ function MakeComment(postID) {
 
 	useEffect(() => {
 		if (loading) return;
-		//if (user) navigate("/home");
 	}, [user, loading]);
 
 	return (

@@ -1,7 +1,7 @@
 import {CircleFill, Gear} from "react-bootstrap-icons";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {useEffect, useState} from "react";
-import {auth, db, logout} from "../services/firebase";
+import {auth} from "../services/firebase";
 import {useNavigate} from "react-router-dom";
 import {
 	fetchUserName,
@@ -16,7 +16,7 @@ import {
 } from "../components/Account";
 
 function Settings() {
-	const [user, loading, error] = useAuthState(auth);
+	const [user, loading] = useAuthState(auth);
 	const [name, setName] = useState("");
 	const [followers, setFollowers] = useState(0);
 	const [fname, setFirstName] = useState("");

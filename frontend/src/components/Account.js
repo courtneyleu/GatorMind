@@ -1,13 +1,5 @@
-import {
-	collection,
-	query,
-	where,
-	getDocs,
-	doc,
-	getDoc,
-	collectionGroup,
-} from "firebase/firestore";
-import {auth, db} from "../services/firebase";
+import {collection, getDoc, getDocs, query, where,} from "firebase/firestore";
+import {db} from "../services/firebase";
 
 // gets the user's first name
 const fetchFirstName = async (user) => {
@@ -15,8 +7,7 @@ const fetchFirstName = async (user) => {
 		const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 		const doc = await getDocs(q);
 		const data = doc.docs[0].data();
-		let following = data.firstName;
-		return following;
+		return data.firstName;
 	} catch (err) {
 		console.error(err);
 	}
@@ -28,8 +19,7 @@ const fetchLastName = async (user) => {
 		const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 		const doc = await getDocs(q);
 		const data = doc.docs[0].data();
-		let following = data.lastName;
-		return following;
+		return data.lastName;
 	} catch (err) {
 		console.error(err);
 	}
@@ -41,8 +31,7 @@ const getFollowers = async (user) => {
 		const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 		const doc = await getDocs(q);
 		const data = doc.docs[0].data();
-		let followers = data.followers;
-		return followers;
+		return data.followers;
 	} catch (err) {
 		console.error(err);
 	}
@@ -54,8 +43,7 @@ const fetchUserName = async (user) => {
 		const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 		const doc = await getDocs(q);
 		const data = doc.docs[0].data();
-		let username = data.username;
-		return username;
+		return data.username;
 	} catch (err) {
 		console.error(err);
 	}
@@ -67,8 +55,7 @@ const getFollowing = async (user) => {
 		const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 		const doc = await getDocs(q);
 		const data = doc.docs[0].data();
-		let following = data.following;
-		return following;
+		return data.following;
 	} catch (err) {
 		console.error(err);
 	}
@@ -80,8 +67,7 @@ const getPostsLength = async (user) => {
 		const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 		const doc = await getDocs(q);
 		const data = doc.docs[0].data();
-		let posts = data.posts.length;
-		return posts;
+		return data.posts.length;
 	} catch (err) {
 		console.error(err);
 	}
@@ -93,8 +79,7 @@ const getPosts = async (user) => {
 		const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 		const doc = await getDocs(q);
 		const data = doc.docs[0].data();
-		let posts = data.posts;
-		return posts;
+		return data.posts;
 	} catch (err) {
 		console.error(err);
 	}
@@ -106,8 +91,7 @@ const getEmail = async (user) => {
 		const q = query(collection(db, "users"), where("uid", "==", user?.uid));
 		const doc = await getDocs(q);
 		const data = doc.docs[0].data();
-		let posts = data.email;
-		return posts;
+		return data.email;
 	} catch (err) {
 		console.error(err);
 	}
@@ -124,8 +108,8 @@ const getUserLikes = async (user) => {
 		let posts = data.posts;
 		let likes = 0;
 		// cycle through posts to add likes
-		for (let i = 0; i < posts.length; i++) {
-			const postDoc = await getDoc(posts[i]);
+		for (const post of posts) {
+			const postDoc = await getDoc(post);
 			const postData = postDoc.data();
 			if (postData.likes == null) {
 				continue;
@@ -149,8 +133,8 @@ const getUserComments = async (user) => {
 		let posts = data.posts;
 		let comments = 0;
 		// cycle through posts to add number of comments
-		for (let i = 0; i < posts.length; i++) {
-			const postDoc = await getDoc(posts[i]);
+		for (const post of posts) {
+			const postDoc = await getDoc(post);
 			const postData = postDoc.data();
 			if (postData.comment == null) {
 				continue;

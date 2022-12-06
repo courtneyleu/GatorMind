@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from "react";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import {
+	BrowserRouter as Router,
+	Route,
+	Link,
+	Routes,
+	Navigate,
+	useNavigate,
+} from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./pages/Login";
@@ -25,6 +32,7 @@ function App() {
 	const [user, loading] = useAuthState(auth);
 	const [search, SetSearch] = useState("");
 	const [blogs, setBlogs] = useState([]);
+	const navigate = useNavigate();
 
 	// prototype search bar
 	const SearchBlog = (e) => {
@@ -48,82 +56,86 @@ function App() {
 		if (loading) {
 			return;
 		}
-
+		if (user) {
+			Navigate("/home);");
+		}
 	}, [user, loading]);
 
 	return (
-    <Router>
-		<div>
-			{user && (
-				<nav
-					className="navbar navbar-expand navbar-dark bg-dark"
-					style={{position: "sticky", top: "0px", zIndex: "1020"}}
-				>
-					<a className="navbar-brand" href="/home">
-						<MDBIcon fas icon="brain" />
-						GatorMind
-					</a>
-					<div className="navbar-nav ml-auto">
-						<li className="nav-item">
-							<form
-								onSubmit={(e) => {
-									SearchBlog();
-								}}
-							>
-								<input
-									onChange={(e) => {
-										SetSearch(e.target.value);
+		<Router>
+			<div>
+				{user && (
+					<nav
+						className="navbar navbar-expand navbar-dark bg-dark"
+						style={{position: "sticky", top: "0px", zIndex: "1020"}}
+					>
+						<a className="navbar-brand" href="/home">
+							<MDBIcon fas icon="brain" />
+							GatorMind
+						</a>
+						<div className="navbar-nav ml-auto">
+							<li className="nav-item">
+								<form
+									onSubmit={(e) => {
+										SearchBlog();
 									}}
-								/>
-								<button type="submit" className = "btn btn-dark">Search</button>
-							</form>
-						</li>
-						<li className="nav-item">
-							<button type="button" className="btn btn-dark">
-								<Link className="nav-link" to="/home">
-									<HouseDoor />
-								</Link>
-							</button>
-						</li>
-						<li className="nav-item">
-							<button type="button" className="btn btn-dark">
-								<Link className="nav-link" to="/settings">
-									<Gear />
-								</Link>
-							</button>
-						</li>
-						<li className="nav-item">
-							<button type="button" className="btn btn-dark">
-								<Link className="nav-link" to="/profile">
-									<CircleFill />
-								</Link>
-							</button>
-						</li>
-						<li className="nav-item">
-							<button type="button" className="btn btn-dark" onClick={logout}>
-								<Link className="nav-link" to="/">
-									<BackspaceReverse />
-								</Link>
-							</button>
-						</li>
-					</div>
-				</nav>
-			)}
+								>
+									<input
+										onChange={(e) => {
+											SetSearch(e.target.value);
+										}}
+									/>
+									<button type="submit" className="btn btn-dark">
+										Search
+									</button>
+								</form>
+							</li>
+							<li className="nav-item">
+								<button type="button" className="btn btn-dark">
+									<Link className="nav-link" to="/home">
+										<HouseDoor />
+									</Link>
+								</button>
+							</li>
+							<li className="nav-item">
+								<button type="button" className="btn btn-dark">
+									<Link className="nav-link" to="/settings">
+										<Gear />
+									</Link>
+								</button>
+							</li>
+							<li className="nav-item">
+								<button type="button" className="btn btn-dark">
+									<Link className="nav-link" to="/profile">
+										<CircleFill />
+									</Link>
+								</button>
+							</li>
+							<li className="nav-item">
+								<button type="button" className="btn btn-dark" onClick={logout}>
+									<Link className="nav-link" to="/">
+										<BackspaceReverse />
+									</Link>
+								</button>
+							</li>
+						</div>
+					</nav>
+				)}
 
-			<div className="container mt-3">
-				<Routes>
-					<Route path="/" element={<Default />} />
-					<Route path="/home" element={<Home />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/register" element={<Register />} />
-					<Route path="/profile" element={<Profile />} />
-					<Route path="/settings" element={<Settings />} />
-					<Route path="/posts" element={<PostList />} />
-					<Route path="/post/:id" element={<Post />} />
-				</Routes>
+				<div className="container mt-3">
+					<Routes>
+						<Route path="/" element={<Default />} />
+						<Route path="/home" element={<Home />} />
+						<Route path="/login" element={<Login />} />
+						<Route path="/register" element={<Register />} />
+						<Route path="/profile" element={<Profile />} />
+						<Route path="/settings" element={<Settings />} />
+						<Route path="/posts" element={<PostList />} />
+						<Route path="/post/:id" element={<Post />} />
+					</Routes>
+				</div>
 			</div>
-		</div>
-    </Router>
+		</Router>
 	);
 }
 

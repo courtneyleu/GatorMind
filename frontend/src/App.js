@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
-import {Routes, Route, Link, useNavigate} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -24,7 +25,6 @@ function App() {
 	const [user, loading] = useAuthState(auth);
 	const [search, SetSearch] = useState("");
 	const [blogs, setBlogs] = useState([]);
-	const navigate = useNavigate();
 
 	// prototype search bar
 	const SearchBlog = (e) => {
@@ -48,14 +48,11 @@ function App() {
 		if (loading) {
 			return;
 		}
-		if (user) {
-			navigate("/home");
-		} else if (user == null) {
-			navigate("/");
-		}
+
 	}, [user, loading]);
 
 	return (
+    <Router>
 		<div>
 			{user && (
 				<nav
@@ -126,6 +123,7 @@ function App() {
 				</Routes>
 			</div>
 		</div>
+    </Router>
 	);
 }
 

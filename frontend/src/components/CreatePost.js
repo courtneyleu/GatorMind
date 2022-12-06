@@ -36,16 +36,16 @@ const options = [
 ];
 
 function CreatePost() {
-	const [user, loading] = useAuthState(auth);
+	const [user] = useAuthState(auth);
 	const [title, setTitle] = useState("");
 	const [body, setBody] = useState("");
 	const [created_on, setDate] = useState("");
 	const [category, setCategory] = useState();
 	const [username, setUsername] = useState();
 	const [uid, setUID] = useState();
-	const navigate = useNavigate();
 
 	const makePost = async () => {
+		// checks if the required entries are filled -> if not clear them and do not submit
 		if (!title || !body || !category) {
 			document.getElementById("form").reset();
 			if (!title) {
@@ -88,11 +88,14 @@ function CreatePost() {
 			});
 		}
 	};
+
+	// when a category is chosen set it
 	const handleChange = (options) => {
 		setCategory(options);
 		getData();
 	};
 
+	// get the user data
 	const getData = async () => {
 		const uid = user.uid;
 		setUID(uid);

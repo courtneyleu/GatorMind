@@ -12,30 +12,31 @@ import {
 	MDBCardBody,
 	MDBIcon,
 	MDBCardTitle,
+	MDBCard,
 	MDBCardSubTitle,
 } from "mdb-react-ui-kit";
 import "./PostList.css";
+import Button from "react-bootstrap/Button";
 
 const PostList = () => {
 	const [blogs, setBlogs] = useState([]);
 
 	useEffect(() => {
-		const getPosts = async (user) => {
-			try {
-				const q = query(collection(db, "post"));
-				const doc = await getDocs(q);
-				setBlogs(doc.docs);
-			} catch (err) {
-				console.error(err);
-			}
-		};
-
 		getPosts();
 	}, []);
-	const refreshPage = () => {
-		window.location.reload(false);
+
+	// get all the posts in the database and get the data
+	const getPosts = async () => {
+		try {
+			const q = query(collection(db, "post"));
+			const doc = await getDocs(q);
+			setBlogs(doc.docs);
+		} catch (err) {
+			console.error(err);
+		}
 	};
 
+	// with the post information create each card and store them in a list
 	const getBlogs = () => {
 		let list = [];
 		let result = [];
@@ -44,10 +45,7 @@ const PostList = () => {
 		blogs?.map((blogPost) => {
 			i++;
 			return list.push(
-				<div
-					className="row1 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative"
-					style={{width: 1200}}
-				>
+				<MDBCard>
 					<MDBCardBody className="p-5 flex-column" width="1000px">
 						<MDBCardSubTitle className="mb-1 text-muted">
 							{blogPost.data().created_on}
@@ -95,16 +93,16 @@ const PostList = () => {
 							<p>{"Comments: " + blogPost.data().commentNum}</p>
 						</div>
 
-						<Link to={`/post/${i}`}>Continue reading</Link>
+						<Link to={`/post/${blogPost.id}`}>Continue reading</Link>
 					</MDBCardBody>
-				</div>
+				</MDBCard>
 			);
 		});
-		/*className="stretched-link"*/
+
 		for (let i = 0; i < list.length; i++) {
 			result.push(
 				<div key={i} className="row mb-2">
-					<div className="col-md-6">{list[i]}</div>
+					<div>{list[i]}</div>
 				</div>
 			);
 		}
@@ -116,7 +114,7 @@ const PostList = () => {
 		<div>
 			<div className="container mt-3">{getBlogs()}</div>
 			<div>
-				<button class="refreshBtn" tag="a" onClick={refreshPage} size="lg">
+				<button class="refreshBtn" tag="a" onClick={getPosts} size="lg">
 					<MDBIcon fas icon="sync" />
 				</button>
 			</div>

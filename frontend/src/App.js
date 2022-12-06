@@ -51,7 +51,7 @@ function App() {
 		if (user) {
 			navigate("/home");
 		} else if (user == null) {
-			return;
+			navigate("/");
 		}
 	}, [user, loading]);
 

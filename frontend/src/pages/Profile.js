@@ -97,6 +97,9 @@ const Profile = () => {
 			};
 			list.push(data);
 		}
+		list.sort((a, b) => {
+			return new Date(b.created_on) - new Date(a.created_on);
+		});
 		setPostList(list);
 	};
 
@@ -154,7 +157,7 @@ const Profile = () => {
 						{postList?.map((data) => {
 							return (
 								<div>
-									<MDBCard>
+									<MDBCard className="mt-4">
 										<MDBCardBody className="p-5 flex-column">
 											<MDBCardSubTitle className="mb-1 text-muted">
 												{data.created_on}

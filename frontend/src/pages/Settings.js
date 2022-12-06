@@ -28,6 +28,7 @@ function Settings() {
 	const [numComments, setComments] = useState(0);
 	const navigate = useNavigate();
 
+	// gets all the user information
 	useEffect(() => {
 		let promiseNumPosts = getPostsLength(user);
 		promiseNumPosts.then(

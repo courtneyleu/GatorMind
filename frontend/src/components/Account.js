@@ -1,4 +1,4 @@
-import {collection, getDoc, getDocs, query, where,} from "firebase/firestore";
+import {collection, getDoc, getDocs, query, where} from "firebase/firestore";
 import {db} from "../services/firebase";
 
 // gets the user's first name
@@ -111,8 +111,8 @@ const getUserLikes = async (user) => {
 		for (const post of posts) {
 			const postDoc = await getDoc(post);
 			const postData = postDoc.data();
-			if (postData.likes == null) {
-				continue;
+			if (postData.likes == 0) {
+				return 0;
 			}
 			likes += postData.likes;
 		}
@@ -136,10 +136,10 @@ const getUserComments = async (user) => {
 		for (const post of posts) {
 			const postDoc = await getDoc(post);
 			const postData = postDoc.data();
-			if (postData.comment == null) {
+			if (postData.commentNum == null) {
 				continue;
 			} else {
-				comments += postData.comment.length;
+				comments += postData.commentNum;
 			}
 		}
 		return comments;

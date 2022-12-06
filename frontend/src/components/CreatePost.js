@@ -43,6 +43,7 @@ function CreatePost() {
 	const [category, setCategory] = useState();
 	const [username, setUsername] = useState();
 	const [uid, setUID] = useState();
+	const [displayDate, setDisplayDate] = useState("");
 
 	const makePost = async () => {
 		// checks if the required entries are filled -> if not clear them and do not submit
@@ -68,6 +69,7 @@ function CreatePost() {
 				body: body,
 				category: category,
 				created_on: created_on,
+				displayDate: displayDate,
 				likes: 0,
 				username: username,
 				comment: null,
@@ -99,9 +101,12 @@ function CreatePost() {
 	const getData = async () => {
 		const uid = user.uid;
 		setUID(uid);
-		const today = new Date().toISOString().slice(0, 10);
+		const current = new Date();
+		const fullDate = current.toLocaleString();
+		const displayDate = current.toLocaleDateString();
 		const userName = await fetchUserName(user);
-		setDate(today);
+		setDate(fullDate);
+		setDisplayDate(displayDate);
 		setUsername(userName);
 	};
 

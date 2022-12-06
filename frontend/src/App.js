@@ -78,7 +78,7 @@ function App() {
 										SetSearch(e.target.value);
 									}}
 								/>
-								<button type="submit">Search</button>
+								<button type="submit" className = "btn btn-dark">Search</button>
 							</form>
 						</li>
 						<li className="nav-item">

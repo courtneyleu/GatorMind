@@ -112,7 +112,7 @@ const getUserLikes = async (user) => {
 			const postDoc = await getDoc(post);
 			const postData = postDoc.data();
 			if (postData.likes == 0) {
-				like += 0;
+				likes += 0;
 			}
 			likes += postData.likes;
 		}
